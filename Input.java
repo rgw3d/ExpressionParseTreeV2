@@ -60,9 +60,13 @@ public class Input {
      * @return boolean if the expression qualifies as an acceptable expression
      */
     private static boolean isEquation(String input) {
-        if (!(input.length() >= 3) || !(input.contains("+")||input.contains("*")||input.contains("/"))) //to short
+        if (!(input.length() >= 3) ) //to short
         {
             System.out.print("Too Short to be considered an expression");
+            return false;
+        }
+        if(!(input.contains("+")||input.contains("*")||input.contains("/"))){
+            System.out.print("Does not contain an operator");
             return false;
         }
 
@@ -151,6 +155,8 @@ public class Input {
         fix = fix.replace("(+-", "(-"); //common error that happens if multiplying by a negative
 
         fix = fix.replace(")(",")*(");//multiply by parenthesis
+
+        fix = fix.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
 
         if(fix.startsWith("+-"))
             fix = fix.substring(1);
