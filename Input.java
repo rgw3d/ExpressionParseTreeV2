@@ -65,7 +65,7 @@ public class Input {
             System.out.print("Too Short to be considered an expression");
             return false;
         }
-        if(!(input.contains("+")||input.contains("*")||input.contains("/"))){
+        if(!(input.contains("+")||input.contains("*")||input.contains("/") || input.contains("^"))){
             System.out.print("Does not contain an operator");
             return false;
         }
