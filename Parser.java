@@ -47,8 +47,7 @@ public class Parser {
 
                     if (op.equals("+"))
                         operator = new AdditionOperator();
-                    else if (op.equals("*"))
-                        operator = new MultiplicationOperator();
+                    else if (op.equals("*")) operator = new MultiplicationOperator();
                     else if (op.equals("/"))
                         operator = new DivisionOperator();
                     else // if op.equals("^");
