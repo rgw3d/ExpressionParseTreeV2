@@ -1,4 +1,3 @@
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -12,7 +11,7 @@ public class Input {
     public static void main(String[] args) {
 
         System.out.println("Enter an expression to see it simplified");
-        System.out.println("\tType STOP to break the loop");
+        System.out.println("\tType \"stop\" to break the loop");
         while(true){
             System.out.print("Enter Expression:  ");
             String input = new Scanner(System.in).nextLine();
@@ -20,7 +19,7 @@ public class Input {
             if(input.equalsIgnoreCase("stop"))
                 break;
 
-            Date start = new Date();
+
             if (!isEquation(input)) {
                 System.out.println("\nBad Expression. Please Revise\n");
                 continue;
@@ -30,17 +29,18 @@ public class Input {
 
             ControlOperator controlOperator =new ControlOperator();
             Parser parser = new Parser();
+            long time = System.currentTimeMillis();
             controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
 
             printSimplifiedResult(controlOperator.getList());//get the result here
-            System.out.println("It took " + (new Date().getTime() - start.getTime()) + " milliseconds");//print time
+            System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time
             System.out.println("");
 
         }
     }
 
     /**
-     * This is used to print the output after recieving the list of results.
+     * This is used to print the output after receiving the list of results.
      * uses addition between every term
      * does not return anything, as it simply prints out something.
      * @param list must send a ArrayListEquationNode

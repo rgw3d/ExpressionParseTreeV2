@@ -76,7 +76,6 @@ public class Fraction extends NumberStructure {
         Bottom.add(bottom);
     }
 
-
     /**
      * returns the Top list
      * @return ArrayList of top
