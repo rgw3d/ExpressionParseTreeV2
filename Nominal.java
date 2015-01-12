@@ -7,10 +7,10 @@ import java.util.ArrayList;
  */
 public class Nominal extends NumberStructure {
 
-    private double Num;
-    private double Var;
+    private final double Num;
+    private final double Var;
 
-    public static Nominal One = new Nominal(1,0);
+    public static final Nominal One = new Nominal(1,0);
 
     /**
      * Default constructor.
@@ -23,7 +23,7 @@ public class Nominal extends NumberStructure {
 
     /**
      * Secondary constructor
-     * @param num nurical value
+     * @param num numerical value
      * @param var variable exponent
      */
     public Nominal(double num, double var){

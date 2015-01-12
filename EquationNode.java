@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public interface EquationNode {
     /**
-     * getd the number value for the EquationNode
+     * gets the number value for the EquationNode
      * @return double number value
      */
     public double getNum();//returns the number from the operation
@@ -27,7 +27,7 @@ public interface EquationNode {
     /**
      * Treats everything as a fraction. Gets the "top".
      * Usually the top is just the getList() method.
-     * @return Arraylist of simplified "top" terms
+     * @return ArrayList of simplified "top" terms
      */
     public ArrayList<EquationNode> getTop();
 

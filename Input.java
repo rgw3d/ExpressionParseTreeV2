@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Input class for EquationParseTree
  * Created by rgw3d on 10/9/2014.
  */
-public class Input {
+class Input {
     public static void main(String[] args) {
 
         System.out.println("Enter an expression to see it simplified");
@@ -112,7 +112,7 @@ public class Input {
      * @param input the string to be tested
      * @return true if there is an inconsistency.
      */
-    public static boolean parenthesisCheck(String input){
+    private static boolean parenthesisCheck(String input){
         int openCount = 0;
         int closedCount = 0;
         for(int indx = 0; indx<input.length(); indx++){
@@ -140,7 +140,7 @@ public class Input {
      */
     private static String handSanitizer(String fix) {
         System.out.print("\n\tInput Equation: " + fix);
-        fix = fix.replace(" ", "");//Geting rid of spaces
+        fix = fix.replace(" ", "");//Getting rid of spaces
 
         fix = fix.replace("--", "+"); //minus a minus is addition.  make it simple
 

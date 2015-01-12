@@ -51,12 +51,11 @@ public class Fraction extends NumberStructure {
     }
 
     /**
-     * Secondary Constructor
-     * @param top NumberStructure (fraction or nominal) to set as top
+     * Secondary Constructor - set the bottom of the fraction, default top is 1
      * @param bottom ArrayList to set as bottom value
      */
-    public Fraction(NumberStructure top, ArrayList<EquationNode> bottom) {
-        Top.add(top);
+    public Fraction(ArrayList<EquationNode> bottom) {
+        Top.add(Nominal.One);
         if(bottom.size() ==0){//if it is zero, then the zero has been removed and it is a divide by zero error
             throw new IllegalArgumentException("Error: Divisor is 0");
         }
@@ -64,16 +63,12 @@ public class Fraction extends NumberStructure {
     }
 
     /**
-     * Secondary Constructor
+     * Secondary Constructor - set the top of a fraction, default bottom value is 1
      * @param top NumberStructure (fraction or nominal) to set as top
-     * @param bottom NumberStructure (fraction or nominal) to set as bottom
      */
-    public Fraction(NumberStructure top, NumberStructure bottom) {
+    public Fraction(NumberStructure top) {
         Top.add(top);
-        if(bottom.equals(new Nominal())){
-            throw new IllegalArgumentException("Error: Divisor is 0");
-        }
-        Bottom.add(bottom);
+        Bottom.add(Nominal.One);
     }
 
     /**
@@ -86,7 +81,7 @@ public class Fraction extends NumberStructure {
     }
 
     /**
-     * Retuns the Top list
+     * Returns the Top list
      * Also cleans the returned value by removing zeros
      * @return ArrayList of the top values
      */

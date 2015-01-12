@@ -2,21 +2,19 @@
  * Used to parse equation.  will return one EquationNode.  This means that
  * Created by rgw3d on 10/9/2014.
  */
-public class Parser {
+class Parser {
     /**
-     * Essentially this will be called recursivly, until the only thing left to parse are
+     * Essentially this will be called recursively, until the only thing left to parse are
      * Nominals/variables which will end parsing.
      * The rules for parsing:
      * Find + outside of Parenthesis, then parse left side of the +, store it in an additionOperator, then store parsed right side of + into the same additionOperator
-     * Find Mult or Div outside of Parenthesis, same as above
+     * Find multiplication or division outside of Parenthesis, same as above
      * Find ^ operator, same as above
      * Find Parenthesis,
      * Find the actual numbers
-     * <p/>
-     * This results in a tree of Operators, with an additionOperator containing a multiplicaiton on the left, and division on the right
+     * This results in a tree of Operators, with an additionOperator containing a multiplication on the left, and division on the right
      * This would look like 3*2+4/4.  It is parsed into a tree
-     * <p/>
-     * Parsing continues recursivly until actual numbers are found
+     * Parsing continues recursively until actual numbers are found
      *
      * @param input String input from the Input class to be parsed into something we can work with
      */
@@ -87,9 +85,9 @@ public class Parser {
      *
      * @param input string current string being parsed
      * @param indx  int current indx
-     * @return int index of the string where the parentheis has been skipped
+     * @return int index of the string where the parenthesis has been skipped
      */
-    public int skipParen(String input, int indx) {
+    private int skipParen(String input, int indx) {
         int openCount = 0;
         int closedCount = 1;
         while (indx > 0) {
@@ -118,8 +116,6 @@ public class Parser {
         private String input;
 
         /**
-         * constructor
-         *
          * @param input the string to be parsed
          */
         public ParseNominal(String input) {

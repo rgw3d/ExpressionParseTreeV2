@@ -7,13 +7,13 @@ import java.util.ArrayList;
  * Created by rgw3d on 10/9/2014.
  */
 public abstract class Operator implements EquationNode {
-    public ArrayList<EquationNode> Terms;
-    public boolean evaluated = false;
+    final ArrayList<EquationNode> Terms;
+    boolean evaluated = false;
 
     /**
      * Default constructor
      */
-    public Operator(){
+    Operator(){
         Terms  = new ArrayList<EquationNode>();
     }
 
@@ -22,7 +22,7 @@ public abstract class Operator implements EquationNode {
      *
      * @param terms ArrayList to set as the Terms
      */
-    public Operator(ArrayList<EquationNode> terms){
+    Operator(ArrayList<EquationNode> terms){
         Terms = terms;
     }
 
@@ -51,8 +51,8 @@ public abstract class Operator implements EquationNode {
     }
 
     /**
-     * Default action of the getTop(), retuns the list.  essentially just getList()
-     * @return ArrayList that is also retuned from getList()
+     * Default action of the getTop(), returns the list.  essentially just getList()
+     * @return ArrayList that is also returned from getList()
      */
     public ArrayList<EquationNode> getTop(){
         return getList();

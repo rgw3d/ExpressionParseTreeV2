@@ -6,7 +6,7 @@ import java.util.Hashtable;
  * All the math operations used in each Operator class
  * Created by rgw3d on 10/10/2014.
  */
-public class MathOperations {
+class MathOperations {
 
     /**
      * This method will do addition in a list that has two terms
@@ -102,7 +102,7 @@ public class MathOperations {
         Hashtable<Double, ArrayList<EquationNode>> sortedNominals = new Hashtable<Double, ArrayList<EquationNode>>();
         ArrayList<Double> varsAdded = new ArrayList<Double>();
 
-        for (EquationNode nom : terms) {//add everyone to their respectieve gropus
+        for (EquationNode nom : terms) {//add everyone to their respective groups
             Double nomBottom = nom.getVar();//the variable value of the nominal
             try {
                 sortedNominals.get(nomBottom).add(nom);//use the key to get the ArrayList<EquationNode> and then add the nominal
@@ -119,7 +119,7 @@ public class MathOperations {
         Collections.reverse(varsAdded);//descending order
         for (Double var : varsAdded) {
             Nominal simp = variableIndependentAddition(sortedNominals.get(var));
-            if(simp.getNum()!=0)//num doesnt equal zero.  stops this situation--> 0.0x^2.0 from happening and screwing things up
+            if(simp.getNum()!=0)//num doesn't equal zero.  stops this situation--> 0.0x^2.0 from happening and screwing things up
                 terms.add(simp);
         }
     }
@@ -176,7 +176,7 @@ public class MathOperations {
             if(sortedFractions.get(x).size()!=0 && sortedFractions.get(x).get(0).getTop().size() ==1 && sortedFractions.get(x).get(0).getTop().get(0).getNum() != 0) //if the number does not equal zero
                 //noinspection SuspiciousNameCombination
                 terms.add(simplifyFractions(new Fraction(sortedFractions.get(x),x)));
-            //the if is necessary because sometimes there can be this number--> 0.0x^2.0.  screws up later.  so just dont add it.
+            //the if is necessary because sometimes there can be this number--> 0.0x^2.0.  screws up later.  so just don't add it.
         }
     }
 
@@ -209,7 +209,7 @@ public class MathOperations {
      * @return NumberStructure, either a fraction or nominal
      */
     private static NumberStructure nominalMultiplication(ArrayList<EquationNode> terms) {
-        Fraction fraction = new Fraction(Nominal.One,Nominal.One);
+        Fraction fraction = new Fraction(Nominal.One);
         for(EquationNode node : terms){
             fraction.Top = multiplyLists(fraction.getTop(), node.getTop());
             fraction.Bottom = multiplyLists(fraction.getBottom(), node.getBottom());
@@ -293,11 +293,11 @@ public class MathOperations {
         if(fraction instanceof Nominal)//if a nominal is sent. cannot be simplified
             return fraction;
 
-        for (EquationNode top : fraction.getTop()) {//simplify underliying fractions
+        for (EquationNode top : fraction.getTop()) {//simplify underlying fractions
             if (top instanceof Fraction) {//could be a fraction in a fraction
                 int tmpIndx = fraction.getTop().indexOf(top);//get indx of fraction
                 fraction.getTop().remove(top);//remove the object from the list
-                fraction.getTop().add(tmpIndx, simplifyFractions((Fraction) top));//add the "simplifed" object back in
+                fraction.getTop().add(tmpIndx, simplifyFractions((Fraction) top));//add the "simplified" object back in
             }
 
         }
@@ -305,7 +305,7 @@ public class MathOperations {
             if (bot instanceof Fraction) {//could be a fraction in a fraction
                 int tmpIndx = fraction.getBottom().indexOf(bot);//get indx of fraction
                 fraction.getBottom().remove(bot);//remove the object from the list
-                fraction.getBottom().add(tmpIndx, simplifyFractions((Fraction) bot));//add the "simplifed" object back in
+                fraction.getBottom().add(tmpIndx, simplifyFractions((Fraction) bot));//add the "simplified" object back in
             }
 
         }
@@ -322,13 +322,13 @@ public class MathOperations {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getTop().get(i).getNum();
 
-                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are ints
+                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are integers
                         if (possibleOutsideGCD == 0) {
                             possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
                         } else {
-                            if (!((int) insideNum % possibleOutsideGCD == 0)) {//so the factor doesnt work
+                            if (!((int) insideNum % possibleOutsideGCD == 0)) {//so the factor doesn't work
                                 possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
-                                i = 0;//reseting the loop so that this new gcd value is tested.  if the value is 1, then it will work (no infinite loop)
+                                i = 0;//resetting the loop so that this new gcd value is tested.  if the value is 1, then it will work (no infinite loop)
                                 //reset the loop and then continue; to loop through again
 
                             }//if false, then its good -- do nothing because this factor works.
@@ -345,7 +345,7 @@ public class MathOperations {
                     break outerTopLoop;
                 }
             }
-            //this is where we add the possibleGCD value to the arraylist if it has survived
+            //this is where we add the possibleGCD value to the ArrayList if it has survived
             if (possibleOutsideGCD != 1 && possibleOutsideGCD != 0) {
                 topDivisors.add(possibleOutsideGCD);
             }
@@ -362,13 +362,13 @@ public class MathOperations {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getBottom().get(i).getNum();
 
-                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are ints
+                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are integers
                         if (possibleOutsideGCD == 0) {
                             possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
                         } else {
-                            if (!((int) insideNum % possibleOutsideGCD == 0)) {//so the factor doesnt work
+                            if (!((int) insideNum % possibleOutsideGCD == 0)) {//so the factor doesn't work
                                 possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
-                                i = 0;//reseting the loop so that this new gcd value is tested.  if the value is 1, then it will work (no infinite loop)
+                                i = 0;//resetting the loop so that this new gcd value is tested.  if the value is 1, then it will work (no infinite loop)
                                 //reset the loop and then continue; to loop through again
 
                             }//if false, then its good -- do nothing because this factor works.
@@ -385,7 +385,7 @@ public class MathOperations {
                     break outerBotLoop;
                 }
             }
-            //this is where we add the possibleGCD value to the arraylist if it has survived
+            //this is where we add the possibleGCD value to the ArrayList if it has survived
             if (possibleOutsideGCD != 1 && possibleOutsideGCD != 0) {
                 botDivisors.add(possibleOutsideGCD);
             }
@@ -430,14 +430,14 @@ public class MathOperations {
         /*
         above loops divided shit.  now its time to remove the variables.  yay dividing by variables.
         how to do this.  we will just get a int that says the lowest var exponent that each have.
-        then compare the two and whicever is the smallest we will then just remove that many number of exponents from all of them
+        then compare the two and whichever is the smallest we will then just remove that many number of exponents from all of them
         negative exponents do not count.
         wait, we can just do Math.abs(and use those values.  maybe.  i will think about it.
         nope. no negative exponents so far
         */
 
             boolean canReduceVars = true;
-            int topSmallestVar = -1;//non innitialized values
+            int topSmallestVar = -1;//non initialized values
             int botSmallestVar = -1;
 
             for (EquationNode x : fraction.getTop()) {
@@ -516,7 +516,7 @@ public class MathOperations {
         if(terms.size()!=2)
             throw new IndexOutOfBoundsException("Terms had a size that was not 2: " +terms.size());
         if(canRaiseToPower(terms)){//if exponent is or can be simplified to one integer.
-            if (terms.get(0) instanceof Nominal) {//meaning that the first term is actually something else. like a multiplicaiton operator or something.
+            if (terms.get(0) instanceof Nominal) {//meaning that the first term is actually something else. like a multiplication operator or something.
                 baseIsNominal(terms);
             }
             else
@@ -556,7 +556,7 @@ public class MathOperations {
             terms.add(Nominal.One);
         }
         else if(expnt <0){//negative exponent
-            Fraction flipped = new Fraction(Nominal.One,terms.get(0).getList());
+            Fraction flipped = new Fraction(terms.get(0).getList());
             expnt = Math.abs(expnt);
 
             if(expnt-1==0){//not multiplied.  exponent of 1
