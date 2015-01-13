@@ -20,7 +20,7 @@ public class SolveChoice {
      */
     public static void startSolve(ArrayList<EquationNode> list){
         int length = list.size();
-        boolean hasFractions = findFractions(list);//if true, then it is not a true polynomial
+        int countFractions = countFractions(list);
         double highestExponent = findHighestExponent(list);
 
         switch (length){
@@ -28,7 +28,7 @@ public class SolveChoice {
                 System.out.print("Nothing to solve");
                 break;
             case 1:
-                if(hasFractions){
+                if(countFractions == 0){
                     //do something with 1 fraction
                 }
                 else{
@@ -36,7 +36,7 @@ public class SolveChoice {
                 }
                 break;
             case 2:
-                if(hasFractions){
+                if(countFractions == 0){
                     //do something with the fractions
                 }
                 else{
@@ -74,6 +74,22 @@ public class SolveChoice {
             }
         }
         return false;
+    }
+
+    /**
+     * Count the number of fractions
+     *
+     * @param list the list of EquationNodes
+     * @return count of the fractions in the list
+     */
+    private static int countFractions(ArrayList<EquationNode> list){
+        int count = 0;
+        for(EquationNode node: list){
+            if(node instanceof Fraction){
+               count ++;
+            }
+        }
+        return count;
     }
 
     /**
