@@ -5,6 +5,9 @@ package Simplifier;
  * Created by rgw3d on 10/9/2014.
  */
 public class Parser {
+
+    public static String variable = "";//can be any variable
+
     /**
      * Essentially this will be called recursively, until the only thing left to parse are
      * Nominals/variables which will end parsing.
@@ -47,7 +50,8 @@ public class Parser {
 
                     if (op.equals("+"))
                         operator = new AdditionOperator();
-                    else if (op.equals("*")) operator = new MultiplicationOperator();
+                    else if (op.equals("*"))
+                        operator = new MultiplicationOperator();
                     else if (op.equals("/"))
                         operator = new DivisionOperator();
                     else // if op.equals("^");
@@ -129,14 +133,14 @@ public class Parser {
          * parses and then stores the values of the input string
          */
         private void parseInput() {
-            if (input.contains("x"))//if there is a x in it
+            if (input.contains(variable))//if there is a x in it
                 varExponent = 1;
 
-            if (input.equals("x") || input.equals("-x"))// if it just a "x"
-                input = input.replace("x", "1x");
+            if (input.equals(variable) || input.equals("-"+variable))// if it just a "x"
+                input = input.replace(variable, "1"+variable);
             if (input.equals("-"))//another special case where it sends just a negative
                 input = input.replace("-", "-1");
-            input = input.replace("x", "");
+            input = input.replace(variable, "");
             constantCount = Double.parseDouble(input);
 
         }

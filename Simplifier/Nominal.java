@@ -103,13 +103,13 @@ public class Nominal extends NumberStructure {
         if(getVar()!=0){
             if((int)getVar()==getVar())
                 if(this.equals(new Nominal(1,1)))
-                    toReturn = "x";
+                    toReturn = Parser.variable;
                 else if(getVar()==1)
-                    toReturn+="x";
+                    toReturn+=Parser.variable;
                 else
-                    toReturn+="x^"+(int)getVar();
+                    toReturn+=Parser.variable+"^"+(int)getVar();
             else
-                toReturn+="x^"+getVar();
+                toReturn+=Parser.variable+"^"+getVar();
         }
 
         return toReturn;

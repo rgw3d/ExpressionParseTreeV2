@@ -19,17 +19,22 @@ class Input {
         System.out.println("\tType \"stop\" to break the loop");
         while(true){
             System.out.print("Enter Expression:  ");
-            String input = new Scanner(System.in).nextLine();
+            String input = new Scanner(System.in).nextLine().toLowerCase();
             System.out.println();
             if(input.equalsIgnoreCase("stop"))
                 break;
-
 
             if (!isEquation(input)) {
                 System.out.println("\nBad Expression. Please Revise\n");
                 continue;
             }
+            System.out.println("Syntax Passed!");
 
+            if(!Parser.variable.equals("")) {
+                System.out.println("\tParsing with respect to: "+Parser.variable);
+            }
+
+            System.out.println("\tInput Equation: " + input);
             input = handSanitizer(input);
 
             ControlOperator controlOperator =new ControlOperator();
@@ -40,9 +45,9 @@ class Input {
             printSimplifiedResult(controlOperator.getList());//get the result here
             SolveChoice.startSolve(controlOperator.getList());
 
-            System.out.println("");
+            System.out.println();
             System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time
-            System.out.println("");
+            System.out.println();
 
         }
     }
@@ -92,17 +97,33 @@ class Input {
             return false;
         }
 
-        Pattern p = Pattern.compile("[^(0-9,*,/,\\-,\\.,+,x,X,\\^,\\s)]");
+        Pattern p = Pattern.compile("[^(0-9,a-z*,/,\\-,\\.,+,\\^,\\s)]");
         Matcher m = p.matcher(input);
         if (m.find()) {//detects illegal character
             System.out.println("Illegal Character(s): " + m.group());
             return false;
         }
 
-        Pattern n = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
-        Matcher o = n.matcher(input);
-        if (o.find()) {
-            System.out.print("Two or more of a kind");
+        String variable = "";//find the variable
+        for(char indx: input.toCharArray()){
+            p = Pattern.compile("[a-z]");
+            m = p.matcher(indx+"");
+            if(m.find()){
+                if(variable.equals("")){
+                    variable = m.group();
+                }
+                else if(!variable.equals(m.group())){
+                    System.out.print("Mixing variables! Use only one variable.");
+                    return false;
+                }
+            }
+        }
+        Parser.variable = variable;
+
+        p = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
+        m = p.matcher(input);
+        if (m.find()) {
+            System.out.print("Two or more of a kind: "+m.group());
             return false;
         }
 
@@ -112,7 +133,6 @@ class Input {
         }
 
         //good syntax
-        System.out.print("Syntax Passed!");
         return true;
     }
 
@@ -148,14 +168,13 @@ class Input {
      * @return returns the "fixed"  string
      */
     private static String handSanitizer(String fix) {
-        System.out.print("\n\tInput Equation: " + fix);
+        String orig = fix;
+
         fix = fix.replace(" ", "");//Getting rid of spaces
 
         fix = fix.replace("--", "+"); //minus a minus is addition.  make it simple
 
         fix = fix.replace("-", "+-");  //replace a negative with just plus a minus.
-
-        fix = fix.replace("X", "x");//just cuz
 
         fix = fix.replace("^+-", "^-"); //common error that happens after one of the above methods run. negative exponents
 
@@ -168,11 +187,10 @@ class Input {
         fix = fix.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
 
         if(fix.startsWith("+-"))
-            fix = fix.substring(1);
+            fix = fix.substring(1);//can't start with a +  happens of above replacements
 
-
-        //this will be updated later as I fix all the syntax errors that come with exponents and parentheses
-        System.out.println("\tReformatted Equation: " + fix);
+        if(!orig.equals(fix))
+            System.out.println("\tReformatted Equation: " + fix);//only if it has changed print the reformatted equation
         return fix;
     }
 }

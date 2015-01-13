@@ -40,7 +40,6 @@ public class SolveChoice {
         return false;
     }
 
-
     /**
      * Find the highest exponent, assuming no fractions, in a polynomial.
      * Fractions are ignored!
