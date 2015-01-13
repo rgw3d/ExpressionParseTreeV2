@@ -38,6 +38,7 @@ class Input {
 
             printSimplifiedResult(controlOperator.getList());//get the result here
 
+            System.out.println("");
             System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time
             System.out.println("");
 
@@ -108,8 +109,8 @@ class Input {
             return false;
         }
 
-        //good syntax if
-        System.out.print("Syntax Passed");
+        //good syntax
+        System.out.print("Syntax Passed!");
         return true;
     }
 
