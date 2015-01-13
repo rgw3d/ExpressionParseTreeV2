@@ -1,4 +1,6 @@
-package Simplifier;
+import Simplifier.ControlOperator;
+import Simplifier.EquationNode;
+import Simplifier.Parser;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -6,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Simplifier.Input class for EquationParseTree
+ * Input class for EquationParseTree
  * Created by rgw3d on 10/9/2014.
  */
 class Input {
@@ -143,7 +145,7 @@ class Input {
      * @return returns the "fixed"  string
      */
     private static String handSanitizer(String fix) {
-        System.out.print("\n\tSimplifier.Input Equation: " + fix);
+        System.out.print("\n\tInput Equation: " + fix);
         fix = fix.replace(" ", "");//Getting rid of spaces
 
         fix = fix.replace("--", "+"); //minus a minus is addition.  make it simple

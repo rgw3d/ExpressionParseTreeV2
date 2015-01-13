@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * Created by rgw3d on 10/9/2014.
  */
 public class PowerOperator extends Operator {
+
     /**
      * Default constructor
      */

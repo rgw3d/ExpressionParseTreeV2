@@ -8,7 +8,7 @@ import java.util.Hashtable;
  * All the math operations used in each Simplifier.Operator class
  * Created by rgw3d on 10/10/2014.
  */
-class MathOperations {
+public class MathOperations {
 
     /**
      * This method will do addition in a list that has two terms
