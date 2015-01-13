@@ -38,7 +38,7 @@ class Input {
             controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
 
             printSimplifiedResult(controlOperator.getList());//get the result here
-            SolveChoice.MakeChoice(controlOperator.getList());
+            SolveChoice.startSolve(controlOperator.getList());
 
             System.out.println("");
             System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time

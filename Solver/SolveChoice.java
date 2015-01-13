@@ -1,6 +1,8 @@
 package Solver;
 
 import Simplifier.EquationNode;
+import Simplifier.Fraction;
+import Simplifier.Nominal;
 
 import java.util.ArrayList;
 
@@ -10,8 +12,45 @@ import java.util.ArrayList;
  */
 public class SolveChoice {
 
-    public static void MakeChoice(ArrayList<EquationNode> list){
+    public static void startSolve(ArrayList<EquationNode> list){
+        int length = list.size();
+        boolean fractions = findFractions(list);
+        double highestExponent = findHighestExponent(list);
+    }
 
+    /**
+     * Determine if there is a fraction or not
+     *
+     * @param list the list of EquationNodes
+     * @return boolean if there is one or more instances of a fraction
+     */
+    private static boolean findFractions(ArrayList<EquationNode> list){
+        for(EquationNode node: list){
+            if(node instanceof Fraction){
+                return true;//if there is one fraction, return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Find the highest exponent, assuming no fractions, in a polynomial.
+     * Fractions are ignored!
+     *
+     * @param list the list of EquationNodes
+     * @return double of the highestExponent
+     */
+    private static double findHighestExponent(ArrayList<EquationNode> list){
+        double highestExponent = 0;
+        for(EquationNode node: list){
+            if(node instanceof Nominal){
+                if(node.getVar()>highestExponent){
+                    highestExponent = node.getVar();
+                }
+            }
+        }
+        return highestExponent;
     }
 
 
