@@ -1,16 +1,18 @@
+package Simplifier;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 
 /**
- * All the math operations used in each Operator class
+ * All the math operations used in each Simplifier.Operator class
  * Created by rgw3d on 10/10/2014.
  */
 class MathOperations {
 
     /**
      * This method will do addition in a list that has two terms
-     * @param terms all EquationNode objects to add.  size() must == 2
+     * @param terms all Simplifier.EquationNode objects to add.  size() must == 2
      */
     public static void additionControl(ArrayList<EquationNode> terms){
         if(terms.size()!=2)
@@ -23,8 +25,7 @@ class MathOperations {
         }
         else{
             ArrayList<EquationNode> complexAddition = complexAdditionControl(allTerms);
-
-            terms.clear();//add the results back to the same list
+            terms.clear();//add the results back to the same list, so we clear the old list
             terms.addAll(complexAddition);
 
         }
@@ -63,17 +64,15 @@ class MathOperations {
     }
 
     /**
-     * Checks to see if the variables of a list of EquationNode objects have the same getVar() value.
+     * Checks to see if the variables of a list of Simplifier.EquationNode objects have the same getVar() value.
      * this would mean that the terms are easy to add together, and simply summing the getNum() values is sufficient
-     * @param terms all EquationNode objects to test
-     * @return boolean if getVar() is the same in all terms objects.  if any term is not instanceOf Nominal, returns false
+     * @param terms all Simplifier.EquationNode objects to test
+     * @return boolean if getVar() is the same in all terms objects.  if any term is not instanceOf Simplifier.Nominal, returns false
      */
     private static boolean sameVariablePower(ArrayList<EquationNode> terms){
         double variablePower = terms.get(0).getVar();
         for(EquationNode node: terms){
-            if(!(node instanceof Nominal))
-                return false;
-            if(node.getVar()!=variablePower)
+            if(!(node instanceof Nominal) || node.getVar()!=variablePower)
                 return false;
         }
         return true;
@@ -82,8 +81,8 @@ class MathOperations {
     /**
      * Sums the getNum() value of a list of terms.
      * Assumes sameVariablePower()==true;
-     * @param terms all EquationNode objects to add
-     * @return Nominal that contains summed value along with correct getVar() value.
+     * @param terms all Simplifier.EquationNode objects to add
+     * @return Simplifier.Nominal that contains summed value along with correct getVar() value.
      */
     private static Nominal variableIndependentAddition(ArrayList<EquationNode> terms){
         double total = 0;
@@ -96,7 +95,7 @@ class MathOperations {
     /**
      * Run if sameVariablePower()==false;
      * Adds numbers if their variable exponents allow them to.
-     * @param terms all EquationNode objects to add
+     * @param terms all Simplifier.EquationNode objects to add
      */
     private static void variableDependentAddition(ArrayList<EquationNode> terms) {
         Hashtable<Double, ArrayList<EquationNode>> sortedNominals = new Hashtable<Double, ArrayList<EquationNode>>();
@@ -105,7 +104,7 @@ class MathOperations {
         for (EquationNode nom : terms) {//add everyone to their respective groups
             Double nomBottom = nom.getVar();//the variable value of the nominal
             try {
-                sortedNominals.get(nomBottom).add(nom);//use the key to get the ArrayList<EquationNode> and then add the nominal
+                sortedNominals.get(nomBottom).add(nom);//use the key to get the ArrayList<Simplifier.EquationNode> and then add the nominal
             } catch (NullPointerException E) {//key was not mapped to a value
                 ArrayList<EquationNode> tmp = new ArrayList<EquationNode>();
                 tmp.add(nom);
@@ -125,8 +124,8 @@ class MathOperations {
     }
 
     /**
-     * This is run if there are things other than Nominal type objects to add together
-     * @param terms all EquationNode objects to add
+     * This is run if there are things other than Simplifier.Nominal type objects to add together
+     * @param terms all Simplifier.EquationNode objects to add
      */
     private static void mixedAddition(ArrayList<EquationNode> terms) {
         //could be a fraction, or could be an Equation Node that wasn't simplified;
@@ -151,7 +150,7 @@ class MathOperations {
     /**
      * run if there are fractions to add together.
      * Will add fractions together if their bottoms are the same.  (common denominator)
-     * @param terms all EquationNode objects to add
+     * @param terms all Simplifier.EquationNode objects to add
      */
     private static void fractionAddition(ArrayList<EquationNode> terms) {
         Hashtable<ArrayList<EquationNode>, ArrayList<EquationNode>> sortedFractions = new Hashtable<ArrayList<EquationNode>, ArrayList<EquationNode>>();
@@ -183,8 +182,7 @@ class MathOperations {
 
     /**
      * Multiplication Control.  This starts the multiplication simplification process
-     *
-     * @param terms all EquationNode objects to multiply.  size() must == 2
+     * @param terms all Simplifier.EquationNode objects to multiply.  size() must == 2
      *
      */
     public static void multiplicationControl(ArrayList<EquationNode> terms){
@@ -205,8 +203,8 @@ class MathOperations {
 
     /**
      * Multiplies two NumberStructures together.  treats them as fractions regardless of type, and simplifies after the multiplication
-     * @param terms all NumberStructure objects to multiply.  Must be instanceOf NumberStructure
-     * @return NumberStructure, either a fraction or nominal
+     * @param terms all Simplifier.NumberStructure objects to multiply.  Must be instanceOf Simplifier.NumberStructure
+     * @return Simplifier.NumberStructure, either a fraction or nominal
      */
     private static NumberStructure nominalMultiplication(ArrayList<EquationNode> terms) {
         Fraction fraction = new Fraction(Nominal.One);
@@ -254,7 +252,7 @@ class MathOperations {
 
     /**
      * Used to determine the path of the multiplication operation.
-     * @param terms all EquationNode objects to test
+     * @param terms all Simplifier.EquationNode objects to test
      * @return boolean true if terms consists of just NumberStructures (fractions or Nominals)
      */
     private static boolean onlyNumberStructures(ArrayList<EquationNode> terms) {
@@ -270,8 +268,7 @@ class MathOperations {
 
     /**
      * Starts the division process.  This returns a fraction or a nominal, depending on what can be divided
-     *
-     * @param terms all EquationNode objects to divide.  size() must == 2
+     * @param terms all Simplifier.EquationNode objects to divide.  size() must == 2
      */
     public static void divisionControl(ArrayList<EquationNode> terms) {
         if(terms.size()!=2)
@@ -285,8 +282,8 @@ class MathOperations {
 
 
     /**
-     * This function will simplify fractions.  it will take (3x/3) and return x  (new Nominal(1,1))
-     * @param fraction the NumberStructure (a Nominal will just be returned) to be simplified
+     * This function will simplify fractions.  it will take (3x/3) and return x  (new Simplifier.Nominal(1,1))
+     * @param fraction the Simplifier.NumberStructure (a Simplifier.Nominal will just be returned) to be simplified
      * @return the simplified fraction.  can be simplified into a nominal.
      */
     private static NumberStructure simplifyFractions(NumberStructure fraction) {
@@ -317,7 +314,7 @@ class MathOperations {
         for (EquationNode outside : fraction.getTop()) {//these should all be nominals.  if not, clear list and break
             int possibleOutsideGCD = 0;
             for (int i = 0; i < fraction.getTop().size(); i++) {
-                //for(EquationNode inside: fraction.getTop()){//
+                //for(Simplifier.EquationNode inside: fraction.getTop()){//
                 if (fraction.getTop().get(i) instanceof Nominal) {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getTop().get(i).getNum();
@@ -357,7 +354,7 @@ class MathOperations {
         for (EquationNode outside : fraction.getBottom()) {//these should all be nominals.  if not, clear list and break
             int possibleOutsideGCD = 0;
             for (int i = 0; i < fraction.getBottom().size(); i++) {
-                //for(EquationNode inside: fraction.getTop()){//
+                //for(Simplifier.EquationNode inside: fraction.getTop()){//
                 if (fraction.getBottom().get(i) instanceof Nominal) {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getBottom().get(i).getNum();
@@ -510,7 +507,7 @@ class MathOperations {
 
     /**
      * This starts the process of raising something to a power. terms.get(0) is the base.  terms.get(1) is the power
-     * @param terms all EquationNode objects to be a part of this operation.  size() must == 2
+     * @param terms all Simplifier.EquationNode objects to be a part of this operation.  size() must == 2
      */
     public static void powerControl(ArrayList<EquationNode> terms){
         if(terms.size()!=2)

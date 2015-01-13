@@ -1,7 +1,9 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
- * Fraction NumberStructure used to represent rational fractions.
+ * Simplifier.Fraction Simplifier.NumberStructure used to represent rational fractions.
  * Created by rgw3d on 10/9/2014.
  */
 public class Fraction extends NumberStructure {
@@ -23,12 +25,12 @@ public class Fraction extends NumberStructure {
      */
     public Fraction(ArrayList<EquationNode> top, ArrayList<EquationNode> bottom) {
 
-        //MathOperations.removeZeros(top);
+        //Simplifier.MathOperations.removeZeros(top);
         if(top.size() == 0){
             top.add(new Nominal(0,0));
         }
         Top = top;
-        //MathOperations.removeZeros(bottom);
+        //Simplifier.MathOperations.removeZeros(bottom);
         if(bottom.size() ==0){//if it is zero, then the zero has been removed and it is a divide by zero error
             throw new IllegalArgumentException("Error: Divisor is 0");
         }
@@ -39,7 +41,7 @@ public class Fraction extends NumberStructure {
     /**
      * Secondary Constructor
      * @param top ArrayList to set as the top value
-     * @param bottom NumberStructure (fraction or nominal) to set as bottom
+     * @param bottom Simplifier.NumberStructure (fraction or nominal) to set as bottom
      */
     @SuppressWarnings("UnusedDeclaration")
     public Fraction(ArrayList<EquationNode> top, NumberStructure bottom) {
@@ -64,7 +66,7 @@ public class Fraction extends NumberStructure {
 
     /**
      * Secondary Constructor - set the top of a fraction, default bottom value is 1
-     * @param top NumberStructure (fraction or nominal) to set as top
+     * @param top Simplifier.NumberStructure (fraction or nominal) to set as top
      */
     public Fraction(NumberStructure top) {
         Top.add(top);

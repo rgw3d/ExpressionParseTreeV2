@@ -1,7 +1,9 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
- * Division Operator.
+ * Division Simplifier.Operator.
  * This operator handles all the division and makes fractions
  * Created by rgw3d on 10/9/2014.
  */

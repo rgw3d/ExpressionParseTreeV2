@@ -1,5 +1,7 @@
+package Simplifier;
+
 /**
- * Used to parse equation.  will return one EquationNode.  This means that
+ * Used to parse equation.  will return one Simplifier.EquationNode.  This means that
  * Created by rgw3d on 10/9/2014.
  */
 class Parser {
@@ -16,7 +18,7 @@ class Parser {
      * This would look like 3*2+4/4.  It is parsed into a tree
      * Parsing continues recursively until actual numbers are found
      *
-     * @param input String input from the Input class to be parsed into something we can work with
+     * @param input String input from the Simplifier.Input class to be parsed into something we can work with
      */
     public EquationNode ParseEquation(String input) {
 
@@ -67,7 +69,7 @@ class Parser {
                 return ParseEquation(input.substring(1, input.length() - 1));//trim the parenthesis
 
             } else if (!hasParen && op.equals("^")) {
-                ParseNominal parseNominal = new ParseNominal(input);//subclass used here to parse Nominal
+                ParseNominal parseNominal = new ParseNominal(input);//subclass used here to parse Simplifier.Nominal
                 return new Nominal(parseNominal.constantCount, parseNominal.varExponent);
             }
 

@@ -1,7 +1,9 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
- * Parent to all of the Operator classes
+ * Parent to all of the Simplifier.Operator classes
  * Deals with getVar() getNum() methods that are not used in the operator classes.
  * Provides addTerm()
  * Created by rgw3d on 10/9/2014.
@@ -27,8 +29,8 @@ public abstract class Operator implements EquationNode {
     }
 
     /**
-     * Extend by all of the Operator classes. default action for adding a term to the list
-     * @param node EquationNode to add
+     * Extend by all of the Simplifier.Operator classes. default action for adding a term to the list
+     * @param node Simplifier.EquationNode to add
      */
     public void addTerm(EquationNode node){
         Terms.add(node);
@@ -60,7 +62,7 @@ public abstract class Operator implements EquationNode {
 
     /**
      * Default action of the getBottom(), returns a nominal(1,) wrapped in an ArrayList
-     * @return ArrayList that contains a Nominal(1,0)
+     * @return ArrayList that contains a Simplifier.Nominal(1,0)
      */
     public ArrayList<EquationNode> getBottom(){
         ArrayList<EquationNode> term = new ArrayList<EquationNode>();

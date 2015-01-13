@@ -1,3 +1,5 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
@@ -7,13 +9,13 @@ import java.util.ArrayList;
  */
 public interface EquationNode {
     /**
-     * gets the number value for the EquationNode
+     * gets the number value for the Simplifier.EquationNode
      * @return double number value
      */
     public double getNum();//returns the number from the operation
 
     /**
-     * gets the variable value for the EquationNode
+     * gets the variable value for the Simplifier.EquationNode
      * @return double Var value
      */
     public double getVar();//returns the variable from the operation

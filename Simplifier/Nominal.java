@@ -1,7 +1,9 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
- * Nominal NumberStructure
+ * Simplifier.Nominal Simplifier.NumberStructure
  * Most basic form of number storage
  * Created by rgw3d on 10/9/2014.
  */
@@ -60,7 +62,7 @@ public class Nominal extends NumberStructure {
 
     /**
      * Return the nominal wrapped in an ArrayList
-     * @return ArrayList that contains the Nominal.
+     * @return ArrayList that contains the Simplifier.Nominal.
      */
     @Override
     public ArrayList<EquationNode> getList() {

@@ -1,10 +1,12 @@
+package Simplifier;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Input class for EquationParseTree
+ * Simplifier.Input class for EquationParseTree
  * Created by rgw3d on 10/9/2014.
  */
 class Input {
@@ -33,6 +35,7 @@ class Input {
             controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
 
             printSimplifiedResult(controlOperator.getList());//get the result here
+
             System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time
             System.out.println("");
 
@@ -43,6 +46,7 @@ class Input {
      * This is used to print the output after receiving the list of results.
      * uses addition between every term
      * does not return anything, as it simply prints out something.
+     *
      * @param list must send a ArrayListEquationNode
      */
     private static void printSimplifiedResult(ArrayList<EquationNode> list) {
@@ -55,6 +59,7 @@ class Input {
     }
 
     /**
+     * Determines if the input string is appropriate to parse
      *
      * @param input the string to be tested
      * @return boolean if the expression qualifies as an acceptable expression
@@ -88,7 +93,6 @@ class Input {
             System.out.println("Illegal Character(s): " + m.group());
             return false;
         }
-
 
         Pattern n = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
         Matcher o = n.matcher(input);
@@ -139,7 +143,7 @@ class Input {
      * @return returns the "fixed"  string
      */
     private static String handSanitizer(String fix) {
-        System.out.print("\n\tInput Equation: " + fix);
+        System.out.print("\n\tSimplifier.Input Equation: " + fix);
         fix = fix.replace(" ", "");//Getting rid of spaces
 
         fix = fix.replace("--", "+"); //minus a minus is addition.  make it simple

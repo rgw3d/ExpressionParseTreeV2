@@ -1,10 +1,12 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
  * Multiplication operator with all the actions to deal with Multiplication
  * Created by rgw3d on 10/9/2014.
  */
-public class MultiplicationOperator extends Operator{
+public class MultiplicationOperator extends Operator {
     /**
      * Default constructor
      */
@@ -27,7 +29,7 @@ public class MultiplicationOperator extends Operator{
      */
     @Override
     public ArrayList<EquationNode> getList() {
-        if(!evaluated) {
+        if (!evaluated) {
             MathOperations.multiplicationControl(Terms);
             evaluated = true;
         }

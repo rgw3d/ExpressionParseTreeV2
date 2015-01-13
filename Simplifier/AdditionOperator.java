@@ -1,7 +1,9 @@
+package Simplifier;
+
 import java.util.ArrayList;
 
 /**
- * Addition Operator with all the necessary actions to deal with addition
+ * Addition Simplifier.Operator with all the necessary actions to deal with addition
  * Created by rgw3d on 10/9/2014.
  */
 public class AdditionOperator extends Operator {

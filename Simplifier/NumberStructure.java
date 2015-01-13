@@ -1,6 +1,8 @@
+package Simplifier;
+
 import java.util.ArrayList;
 /**
- * Parent to the Number Structures, Fraction and Nominal
+ * Parent to the Number Structures, Simplifier.Fraction and Simplifier.Nominal
  * Created by rgw3d on 10/9/2014.
  */
 public abstract class NumberStructure implements EquationNode {
