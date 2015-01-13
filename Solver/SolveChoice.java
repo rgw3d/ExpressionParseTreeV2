@@ -23,6 +23,42 @@ public class SolveChoice {
         boolean hasFractions = findFractions(list);//if true, then it is not a true polynomial
         double highestExponent = findHighestExponent(list);
 
+        switch (length){
+            case 0:
+                System.out.print("Nothing to solve");
+                break;
+            case 1:
+                if(hasFractions){
+                    //do something with 1 fraction
+                }
+                else{
+                    //should be able to solve anything at this point.
+                }
+                break;
+            case 2:
+                if(hasFractions){
+                    //do something with the fractions
+                }
+                else{
+                    //should be able to either factor or solve
+                }
+                break;
+            case 3:
+                //do something with a 3 long list;
+                break;
+            case 4:
+                //do something with a 4 long list;
+                break;
+            case 5:
+                //do something with a 5 long list;
+                //this is probably the most that we can do with a polynomial
+                break;
+            default:
+                //catch anything else of a length.
+                //go from here and determine if it is possible to solve.
+                break;
+        }
+
     }
 
     /**
