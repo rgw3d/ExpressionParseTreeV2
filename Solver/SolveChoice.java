@@ -20,15 +20,19 @@ public class SolveChoice {
      */
     public static void startSolve(ArrayList<EquationNode> list){
         int length = list.size();
-        int countFractions = countFractions(list);
+        int fractionCount = countFractions(list);
         double highestExponent = findHighestExponent(list);
+
+        if(fractionCount == length){
+
+        }
 
         switch (length){
             case 0:
                 System.out.print("Nothing to solve");
                 break;
             case 1:
-                if(countFractions == 0){
+                if(fractionCount >0){
                     //do something with 1 fraction
                 }
                 else{
@@ -36,7 +40,7 @@ public class SolveChoice {
                 }
                 break;
             case 2:
-                if(countFractions == 0){
+                if(fractionCount >0){
                     //do something with the fractions
                 }
                 else{
@@ -62,27 +66,12 @@ public class SolveChoice {
     }
 
     /**
-     * Determine if there is a fraction or not
-     *
-     * @param list the list of EquationNodes
-     * @return boolean if there is one or more instances of a fraction
-     */
-    private static boolean findFractions(ArrayList<EquationNode> list){
-        for(EquationNode node: list){
-            if(node instanceof Fraction){
-                return true;//if there is one fraction, return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Count the number of fractions
      *
      * @param list the list of EquationNodes
      * @return count of the fractions in the list
      */
-    private static int countFractions(ArrayList<EquationNode> list){
+    public static int countFractions(ArrayList<EquationNode> list){
         int count = 0;
         for(EquationNode node: list){
             if(node instanceof Fraction){
@@ -99,7 +88,7 @@ public class SolveChoice {
      * @param list the list of EquationNodes
      * @return double of the highestExponent
      */
-    private static double findHighestExponent(ArrayList<EquationNode> list){
+    public static double findHighestExponent(ArrayList<EquationNode> list){
         double highestExponent = 0;
         for(EquationNode node: list){
             if(node instanceof Nominal){
