@@ -1,6 +1,7 @@
 package Solver;
 
 import Simplifier.EquationNode;
+import Simplifier.Nominal;
 
 import java.util.ArrayList;
 
@@ -25,16 +26,25 @@ public class SolvedEquation {
 
     }
 
+    public SolvedEquation(Nominal results, ArrayList<EquationNode> original){
+
+        ArrayList<EquationNode> tmp = new ArrayList<EquationNode>();
+        tmp.add(results);
+        this.results = tmp;
+        this.original = original;
+
+    }
+
     public int getLength(){
         return original.size();
     }
 
     public int getFractionCount(){
-        return SolveChoice.countFractions(original);
+        return SolveControl.countFractions(original);
     }
 
     public double getHighestExponent(){
-        return SolveChoice.findHighestExponent(original);
+        return SolveControl.findHighestExponent(original);
     }
 
 

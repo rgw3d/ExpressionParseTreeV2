@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by rgw3d on 1/13/2015.
  * This class will determine what action is required to solve an equation for its variable
  */
-public class SolveChoice {
+public class SolveControl {
 
     /**
      * Starts the process of trying to solve for the variable
@@ -21,7 +21,6 @@ public class SolveChoice {
     public static void startSolve(ArrayList<EquationNode> list){
         int length = list.size();
         int fractionCount = countFractions(list);
-        double highestExponent = findHighestExponent(list);
 
         if(fractionCount == length)
             FractionSolver.startFractionSolver(list);

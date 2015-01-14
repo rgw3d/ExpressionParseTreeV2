@@ -1,6 +1,7 @@
 package Solver;
 
 import Simplifier.EquationNode;
+import Simplifier.Nominal;
 
 import java.util.ArrayList;
 
@@ -18,18 +19,17 @@ public class PolynomialSolver {
     public static SolvedEquation startPolynomialSolver(ArrayList<EquationNode> list){
 
         int length = list.size();
+        double highestExponent = SolveControl.findHighestExponent(list);
+
         switch (length){
             case 0:
                 System.out.print("Nothing to solve");
                 break;
             case 1:
-                if(1 >0){
-                    //do something with 1 fraction
-                }
-                else{
-                    //should be able to solve anything at this point.
-                }
-                break;
+                if(highestExponent == 0)//no variable, no answer
+                    return new SolvedEquation(new Nominal(Double.NaN,0),list);
+                else
+                    return  new SolvedEquation(new Nominal(0,0),list);//variable must be zero
             case 2:
                 if(2 >0){
                     //do something with the fractions
