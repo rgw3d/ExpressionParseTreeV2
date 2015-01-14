@@ -12,13 +12,13 @@ public class PolynomialSolver {
 
 
     /**
-     * @param list
-     * @return
+     * @param list of Nominals to be solved
+     * @return SolvedEquation in form of the SolvedEquation object
      */
-    public static ArrayList<EquationNode> startPolynomialSolver(ArrayList<EquationNode> list){
+    public static SolvedEquation startPolynomialSolver(ArrayList<EquationNode> list){
 
 
-        return new ArrayList<EquationNode>();
+        return new SolvedEquation();
     }
 
 }

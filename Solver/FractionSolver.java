@@ -10,11 +10,16 @@ import java.util.ArrayList;
  */
 public class FractionSolver {
 
-    public static ArrayList<EquationNode> startFractionSolver(ArrayList<EquationNode> list){
+    /**
+     * @param list of the equation (assumed set to zero) to be solved
+     * @return the solved equation in the form of an SolvedEquation object
+     */
+    public static SolvedEquation startFractionSolver(ArrayList<EquationNode> list){
 
 
 
 
-        return new ArrayList<EquationNode>();
+
+        return new SolvedEquation();
     }
 }

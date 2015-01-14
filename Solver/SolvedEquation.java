@@ -14,6 +14,10 @@ public class SolvedEquation {
     public ArrayList<EquationNode> results;//the results
     public ArrayList<EquationNode> original;//original equation
 
+    public SolvedEquation(){
+
+    }
+
     public SolvedEquation(ArrayList<EquationNode> results, ArrayList<EquationNode> original){
 
         this.results = results;
