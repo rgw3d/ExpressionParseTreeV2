@@ -1,8 +1,6 @@
 package Solver;
 
 import Simplifier.EquationNode;
-import Simplifier.Fraction;
-import Simplifier.Nominal;
 
 import java.util.ArrayList;
 
@@ -13,26 +11,26 @@ import java.util.ArrayList;
  */
 public class SolvedEquation {
 
-    public ArrayList<EquationNode> results;
-    public ArrayList<EquationNode> eqt;
+    public ArrayList<EquationNode> results;//the results
+    public ArrayList<EquationNode> original;//original equation
 
-    public SolvedEquation(ArrayList<EquationNode> results, ArrayList<EquationNode> eqt){
+    public SolvedEquation(ArrayList<EquationNode> results, ArrayList<EquationNode> original){
 
         this.results = results;
-        this.eqt = eqt;
+        this.original = original;
 
     }
 
     public int getLength(){
-        return eqt.size();
+        return original.size();
     }
 
     public int getFractionCount(){
-        return SolveChoice.countFractions(eqt);
+        return SolveChoice.countFractions(original);
     }
 
     public double getHighestExponent(){
-        return SolveChoice.findHighestExponent(eqt);
+        return SolveChoice.findHighestExponent(original);
     }
 
 
