@@ -284,7 +284,7 @@ public class MathOperations {
     /**
      * This function will simplify fractions.  it will take (3x/3) and return x  (new Simplifier.Nominal(1,1))
      * @param fraction the Simplifier.NumberStructure (a Simplifier.Nominal will just be returned) to be simplified
-     * @return the simplified fraction.  can be simplified into a nominal.
+     * @return NumberStructure. the simplified fraction, or can be simplified into a nominal.
      */
     private static NumberStructure simplifyFractions(NumberStructure fraction) {
         if(fraction instanceof Nominal)//if a nominal is sent. cannot be simplified
@@ -309,23 +309,33 @@ public class MathOperations {
 
         boolean canDivide = true;
 
+
+        /*
+            This section either loops through the top of the fraction, or the bottom of it
+            determining the greatest common divisor of all the numbers
+            Determines that canDevide = false if there is fraction present in the top or bottom of the fraction.
+                this also clears the list of Divisors
+            Loops through each value while looping though each value.
+                get(0) is tested against get(0-(size()-1)) to determine the GCD
+
+
+         */
         ArrayList<Integer> topDivisors = new ArrayList<Integer>();
         outerTopLoop:
         for (EquationNode outside : fraction.getTop()) {//these should all be nominals.  if not, clear list and break
             int possibleOutsideGCD = 0;
             for (int i = 0; i < fraction.getTop().size(); i++) {
-                //for(Simplifier.EquationNode inside: fraction.getTop()){//
                 if (fraction.getTop().get(i) instanceof Nominal) {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getTop().get(i).getNum();
 
-                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are integers
+                    if ((int)outsideNum == outsideNum && (int)insideNum == insideNum) {//if both are integers
                         if (possibleOutsideGCD == 0) {
                             possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
                         } else {
                             if (!((int) insideNum % possibleOutsideGCD == 0)) {//so the factor doesn't work
                                 possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
-                                i = 0;//resetting the loop so that this new gcd value is tested.  if the value is 1, then it will work (no infinite loop)
+                                i = 0;//resetting the loop so that this new gcd value is tested.
                                 //reset the loop and then continue; to loop through again
 
                             }//if false, then its good -- do nothing because this factor works.
@@ -359,7 +369,7 @@ public class MathOperations {
                     double outsideNum = outside.getNum();
                     double insideNum = fraction.getBottom().get(i).getNum();
 
-                    if (outsideNum == Math.round(outsideNum) && insideNum == Math.round(insideNum)) {//if both are integers
+                    if ((int)outsideNum == outsideNum && (int)insideNum == insideNum) {//if both are integers
                         if (possibleOutsideGCD == 0) {
                             possibleOutsideGCD = GCD((int) outsideNum, (int) insideNum);
                         } else {
@@ -488,6 +498,11 @@ public class MathOperations {
 
             if (fraction.getTop().size() == 1 && fraction.getBottom().size() == 1 && fraction.getBottom().get(0).equals(Nominal.One)) //if the number does not equal zero
                 return new Nominal(fraction.getTop().get(0).getNum(), fraction.getTop().get(0).getVar());
+            else if(fraction.getTop().size() == 1 && fraction.getBottom().size() == 1//if only numbers are in the top and bottom.
+                    && fraction.getTop().get(0).getVar() == 0 && fraction.getTop().get(0) instanceof Nominal
+                    && fraction.getBottom().get(0).getVar() == 0 && fraction.getBottom().get(0) instanceof Nominal)
+                return new Nominal(fraction.getTop().get(0).getNum()/fraction.getBottom().get(0).getNum(),0);//return the division of these numbers
+
             return fraction;
 
 

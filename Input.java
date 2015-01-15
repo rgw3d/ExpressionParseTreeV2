@@ -2,7 +2,6 @@ import Simplifier.ControlOperator;
 import Simplifier.EquationNode;
 import Simplifier.Parser;
 import Solver.SolveControl;
-import Solver.SolveControl;
 
 import java.util.ArrayList;
 import java.util.Scanner;

@@ -9,6 +9,9 @@ import java.util.ArrayList;
 /**
  * Created by rgw3d on 1/13/2015.
  * This class will determine what action is required to solve an equation for its variable
+ * Also contains utility functions used by both the Fraction and Polynomial Solver classes
+ *  that do simple things like count the number of Fraction objects in given list, or find
+ *  the highest exponent in a list of Nominals
  */
 public class SolveControl {
 
