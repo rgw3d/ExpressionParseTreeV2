@@ -307,25 +307,11 @@ public class MathOperations {
 
         }
 
-        boolean canDivide = true;
-
-
-        /*
-            This section either loops through the top of the fraction, or the bottom of it
-            determining the greatest common divisor of all the numbers
-            Determines that canDevide = false if there is fraction present in the top or bottom of the fraction.
-                this also clears the list of Divisors
-            Loops through each value while looping though each value.
-                get(0) is tested against get(0-(size()-1)) to determine the GCD
-
-
-         */
         ArrayList<Integer> topDivisors = new ArrayList<Integer>();
         ArrayList<Integer> botDivisors = new ArrayList<Integer>();
-        canDivide = findListGCD(fraction.getTop(), topDivisors) && findListGCD(fraction.getBottom(), botDivisors);
+        boolean canDivide = findListGCD(fraction.getTop(), topDivisors) && findListGCD(fraction.getBottom(), botDivisors);
 
         //now both of the lists have the GCD and can be used to find something to divide by.
-
         if (canDivide) {
             simplifyFractionByGCD(fraction, topDivisors, botDivisors);
         }
@@ -404,13 +390,22 @@ public class MathOperations {
 
 
     }
+
     /**
-     *
+     * Used to get the GCD list of factors for a list of NumberStructures. used by the simplifyFractions() method
      * @param list the list of NumberStructures to test for a list of GCDs
      * @param divisorList the list of GCDs to be added to.  This list will be cleared if the returned value of this function is false
      * @return boolean of if it was able to generate a list of GCDs
      */
     private static boolean findListGCD(ArrayList<EquationNode> list, ArrayList<Integer> divisorList) {
+         /*
+            This section either loops through the top of the fraction, or the bottom of it
+            determining the greatest common divisor of all the numbers
+            Determines that canDevide = false if there is fraction present in the top or bottom of the fraction.
+                this also clears the list of Divisors
+            Loops through each value while looping though each value.
+                get(0) is tested against get(0-(size()-1)) to determine the GCD
+         */
         boolean canDivide = true;
         outerLoop:
         for (EquationNode outside : list) {//these should all be nominals.  if not, clear list and break
@@ -451,6 +446,12 @@ public class MathOperations {
         return canDivide;
     }
 
+    /**
+     * Take the GCD of both the top and bottom of a fraction and see what simplification can be done
+     * @param fraction the fraction to simplify
+     * @param topDivisors list of the top
+     * @param botDivisors list of the bottom
+     */
     private static void simplifyFractionByGCD(NumberStructure fraction, ArrayList<Integer> topDivisors, ArrayList<Integer> botDivisors) {
         Collections.sort(topDivisors);
         Collections.reverse(topDivisors);//reverse because we start with the highest value.
