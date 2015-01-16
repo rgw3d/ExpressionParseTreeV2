@@ -318,42 +318,29 @@ public class MathOperations {
 
 
         /*
-        above loops divided shit.  now its time to remove the variables.  yay dividing by variables.
+        above loops divided the fractions.  now its time to remove the variables.  yay dividing by variables.
         how to do this.  we will just get a int that says the lowest var exponent that each have.
         then compare the two and whichever is the smallest we will then just remove that many number of exponents from all of them
         negative exponents do not count.
-        wait, we can just do Math.abs(and use those values.  maybe.  i will think about it.
-        nope. no negative exponents so far
         */
 
-            boolean canReduceVars = true;
-            int topSmallestVar = -1;//non initialized values
-            int botSmallestVar = -1;
+        boolean canReduceVars = true;
+        int topSmallestVar = findSmallestVariableExponent(fraction.getTop());
+        int botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
 
-            for (EquationNode x : fraction.getTop()) {
-                if (x instanceof Nominal) {
-                    if (topSmallestVar == -1) {
-                        topSmallestVar = (int) x.getVar();
-                    } else if (topSmallestVar > x.getVar() && x.getVar() >= 0) {
-                        topSmallestVar = (int) x.getVar();
-                    }
-                } else {
-                    canReduceVars = false;
-                }
-            }
 
-            for (EquationNode x : fraction.getBottom()) {
+
+        for (EquationNode x : fraction.getBottom()) {
                 if (x instanceof Nominal) {
                     if (botSmallestVar == -1) {
-
                         botSmallestVar = (int) x.getVar();
                     } else if (botSmallestVar > x.getVar() && x.getVar() >= 0) {
                         botSmallestVar = (int) x.getVar();
                     }
                 } else {
-                    canReduceVars = false;
+                    //canReduceVars = false;
                 }
-            }
+        }
 
             if (canReduceVars) {
                 int reduceValue;
@@ -390,6 +377,8 @@ public class MathOperations {
 
 
     }
+
+
 
     /**
      * Used to get the GCD list of factors for a list of NumberStructures. used by the simplifyFractions() method
@@ -447,6 +436,17 @@ public class MathOperations {
     }
 
     /**
+     * used to find the greatest common divisor (GCD)
+     * @param a one of the factors
+     * @param b one of the factors
+     * @return GCD of a and b
+     */
+    private static int GCD(int a, int b) {//greatest common divisor
+        if (b==0) return a;
+        return GCD(b,a%b);
+    }
+
+    /**
      * Take the GCD of both the top and bottom of a fraction and see what simplification can be done
      * @param fraction the fraction to simplify
      * @param topDivisors list of the top
@@ -485,15 +485,26 @@ public class MathOperations {
     }
 
     /**
-     * used to find the greatest common divisor (GCD)
-     * @param a one of the factors
-     * @param b one of the factors
-     * @return GCD of a and b
+     * Used to find the smallest variable exponent in a list of Nominals
+     * Assumed that Fractions are not a part of this list
+     * @param list list of Nominals! Assumed that fractions are not a part of this list!
+     * @return the smallest variable exponent in the list
      */
-    private static int GCD(int a, int b) {//greatest common divisor
-        if (b==0) return a;
-        return GCD(b,a%b);
+    private static int findSmallestVariableExponent(ArrayList<EquationNode> list) {
+        int smallestVar = -1;
+        for (EquationNode x : list) {
+            if (x instanceof Nominal) {
+                if (smallestVar == -1)
+                    smallestVar = (int) x.getVar();
+                else if (smallestVar > x.getVar() && x.getVar() >= 0)
+                    smallestVar = (int) x.getVar();
+            }
+        }
+        return smallestVar;
     }
+
+
+
 
 
     /**
