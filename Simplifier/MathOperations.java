@@ -296,7 +296,6 @@ public class MathOperations {
                 fraction.getTop().remove(top);//remove the object from the list
                 fraction.getTop().add(tmpIndx, simplifyFractions((Fraction) top));//add the "simplified" object back in
             }
-
         }
         for (EquationNode bot : fraction.getBottom()) {//simplify underlying fractions
             if (bot instanceof Fraction) {//could be a fraction in a fraction
@@ -304,24 +303,16 @@ public class MathOperations {
                 fraction.getBottom().remove(bot);//remove the object from the list
                 fraction.getBottom().add(tmpIndx, simplifyFractions((Fraction) bot));//add the "simplified" object back in
             }
-
         }
 
         ArrayList<Integer> topDivisors = new ArrayList<Integer>();
         ArrayList<Integer> botDivisors = new ArrayList<Integer>();
         boolean canDivide = findListGCD(fraction.getTop(), topDivisors) && findListGCD(fraction.getBottom(), botDivisors);
 
-        //now both of the lists have the GCD and can be used to find something to divide by.
-        if (canDivide) {
-            simplifyFractionByGCD(fraction, topDivisors, botDivisors);
+        if (canDivide) {//this test ensures that there are no fractions
+            simplifyFractionByGCD(fraction, topDivisors, botDivisors);//reduce the fraction
 
-        /*
-        above loops divided the fractions.  now its time to remove the variables.  yay dividing by variables.
-        how to do this.  we will just get a int that says the lowest var exponent that each have.
-        then compare the two and whichever is the smallest we will then just remove that many number of exponents from all of them
-        negative exponents do not count.
-        */
-
+            //bellow reduces variables
             int topSmallestVar = findSmallestVariableExponent(fraction.getTop());
             int botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
 
@@ -348,19 +339,18 @@ public class MathOperations {
 
     /**
      * Used to get the GCD list of factors for a list of NumberStructures. used by the simplifyFractions() method
+     *
+     * This section either loops through the top of the fraction, or the bottom of it determining the greatest
+     * common divisor of all the numbers.
+     * Determines that canDivide = false if there is fraction present in the top or bottom of the fraction.
+     *      this also clears the list of Divisors
+     * Loops through each value while looping though each value.
+     *      get(0) is tested against get(0) through get(size()-1) to determine the GCD
      * @param list the list of NumberStructures to test for a list of GCDs
      * @param divisorList the list of GCDs to be added to.  This list will be cleared if the returned value of this function is false
      * @return boolean of if it was able to generate a list of GCDs
      */
     private static boolean findListGCD(ArrayList<EquationNode> list, ArrayList<Integer> divisorList) {
-         /*
-            This section either loops through the top of the fraction, or the bottom of it
-            determining the greatest common divisor of all the numbers
-            Determines that canDivide = false if there is fraction present in the top or bottom of the fraction.
-                this also clears the list of Divisors
-            Loops through each value while looping though each value.
-                get(0) is tested against get(0-(size()-1)) to determine the GCD
-         */
         boolean canDivide = true;
         outerLoop:
         for (EquationNode outside : list) {//these should all be nominals.  if not, clear list and break
@@ -393,10 +383,8 @@ public class MathOperations {
                 }
             }
             //this is where we add the possibleGCD value to the ArrayList if it has survived
-            if (possibleOutsideGCD != 1 && possibleOutsideGCD != 0) {
+            if (possibleOutsideGCD != 1 && possibleOutsideGCD != 0)
                 divisorList.add(possibleOutsideGCD);
-            }
-
         }
         return canDivide;
     }
@@ -431,12 +419,11 @@ public class MathOperations {
                     ArrayList<EquationNode> tmpTop = new ArrayList<EquationNode>();
                     ArrayList<EquationNode> tmpBot = new ArrayList<EquationNode>();
 
-                    for (EquationNode node : fraction.getTop()) {
+                    for (EquationNode node : fraction.getTop())
                         tmpTop.add(new Nominal((node.getNum() / x), node.getVar()));
-                    }
-                    for (EquationNode node : fraction.getBottom()) {
+
+                    for (EquationNode node : fraction.getBottom())
                         tmpBot.add(new Nominal((node.getNum() / x), node.getVar()));
-                    }
 
                     fraction.getTop().clear();
                     fraction.getTop().addAll(tmpTop);
