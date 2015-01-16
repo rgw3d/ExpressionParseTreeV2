@@ -40,9 +40,8 @@ public class Parser {
                 if (eqtIndx.equals(")")) {
                     hasParen = true;
                     indx = skipParen(input, indx);//skips paren and sets indx to its proper "skipped" value
-                    continue;
-                    //skip the rest of the statements so that indx can be again incremented
-                    // this is to prevent indx from being equal to 0 and being decremented
+                    continue; //skip the rest of the statements so that indx can be again incremented
+                                // this is to prevent indx from being equal to 0 and being decremented
                 }
                 if (eqtIndx.equals(op)) {//a hit
 
@@ -50,10 +49,13 @@ public class Parser {
 
                     if (op.equals("+"))
                         operator = new AdditionOperator();
+
                     else if (op.equals("*"))
                         operator = new MultiplicationOperator();
+
                     else if (op.equals("/"))
                         operator = new DivisionOperator();
+
                     else // if op.equals("^");
                         operator = new PowerOperator();
 
@@ -98,16 +100,14 @@ public class Parser {
         int closedCount = 1;
         while (indx > 0) {
             indx--;
-            if ((input.charAt(indx) + "").equals(")")) {
+            if ((input.charAt(indx) + "").equals(")"))
                 closedCount++;//increment closed count
-            }
-            if ((input.charAt(indx) + "").equals("(")) {
-                openCount++;//increment open count
-            }
 
-            if (openCount == closedCount) {
+            if ((input.charAt(indx) + "").equals("("))
+                openCount++;//increment open count
+
+            if (openCount == closedCount)
                 return indx;
-            }
         }
 
         throw new UnsupportedOperationException("Missing Parenthesis Pair");
@@ -130,7 +130,7 @@ public class Parser {
         }
 
         /**
-         * parses and then stores the values of the input string
+         * Parses and then stores the values of the input string
          */
         private void parseInput() {
             if (input.contains(variable))//if there is a x in it
@@ -138,8 +138,10 @@ public class Parser {
 
             if (input.equals(variable) || input.equals("-"+variable))// if it just a "x"
                 input = input.replace(variable, "1"+variable);
+
             if (input.equals("-"))//another special case where it sends just a negative
                 input = input.replace("-", "-1");
+
             input = input.replace(variable, "");
             constantCount = Double.parseDouble(input);
 

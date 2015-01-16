@@ -49,12 +49,10 @@ public class MathOperations {
                 others.add(node);
         }
 
-        if(nominalsOnly.size()>1){
+        if(nominalsOnly.size()>1)
             variableDependentAddition(nominalsOnly);
-        }
-        if(others.size()>1){
+        if(others.size()>1)
           mixedAddition(others);
-        }
 
         terms.clear();
         terms.addAll(nominalsOnly);
@@ -86,9 +84,8 @@ public class MathOperations {
      */
     private static Nominal variableIndependentAddition(ArrayList<EquationNode> terms){
         double total = 0;
-        for(EquationNode node: terms){
+        for(EquationNode node: terms)
             total+=node.getNum();
-        }
         return new Nominal(total,terms.get(0).getVar());
     }
 
@@ -209,8 +206,13 @@ public class MathOperations {
     private static NumberStructure nominalMultiplication(ArrayList<EquationNode> terms) {
         Fraction fraction = new Fraction(Nominal.One);
         for(EquationNode node : terms){
-            fraction.Top = multiplyLists(fraction.getTop(), node.getTop());
-            fraction.Bottom = multiplyLists(fraction.getBottom(), node.getBottom());
+            ArrayList<EquationNode> tmpTop = multiplyLists(fraction.getTop(), node.getTop());
+            fraction.getTop().clear();
+            fraction.getTop().addAll(tmpTop);
+
+            ArrayList<EquationNode> tmpBot = multiplyLists(fraction.getBottom(), node.getBottom());
+            fraction.getBottom().clear();
+            fraction.getBottom().addAll(tmpBot);
         }
         if(fraction.getTop().size()==1 && fraction.getBottom().size()==1 && fraction.getBottom().get(0).equals(Nominal.One))
             return new Nominal(fraction.getTop().get(0).getNum(), fraction.getTop().get(0).getVar());
@@ -396,7 +398,8 @@ public class MathOperations {
      * @return GCD of a and b
      */
     private static int GCD(int a, int b) {//greatest common divisor
-        if (b==0) return a;
+        if (b==0)
+            return a;
         return GCD(b,a%b);
     }
 
@@ -509,12 +512,13 @@ public class MathOperations {
             
         }
         else{//special case. base is nominal.  exponent is real number without variables. but it could be something like 2.2 or 22/10
-            if(terms.get(0) instanceof Nominal && terms.get(1).getList().size()==1
+            if(terms.get(0) instanceof Nominal
+                    && terms.get(1).getList().size() == 1
                     && terms.get(1).getList().get(0) instanceof NumberStructure
-                    && terms.get(1).getList().get(0).getTop().size()==1
-                    && terms.get(1).getList().get(0).getBottom().size()==1
-                    && terms.get(1).getList().get(0).getTop().get(0).getVar()==0
-                    && terms.get(1).getList().get(0).getBottom().get(0).getVar()==0)
+                    && terms.get(1).getList().get(0).getTop().size() == 1
+                    && terms.get(1).getList().get(0).getBottom().size() == 1
+                    && terms.get(1).getList().get(0).getTop().get(0).getVar() == 0
+                    && terms.get(1).getList().get(0).getBottom().get(0).getVar() == 0)
                 baseIsNominal(terms);
             else {
             PowerOperator powerOperator = new PowerOperator(terms);

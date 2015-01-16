@@ -8,8 +8,8 @@ import java.util.ArrayList;
  */
 public class Fraction extends NumberStructure {
 
-    public ArrayList<EquationNode> Top = new ArrayList<EquationNode>();
-    public ArrayList<EquationNode> Bottom = new ArrayList<EquationNode>();
+    private ArrayList<EquationNode> Top = new ArrayList<EquationNode>();
+    private ArrayList<EquationNode> Bottom = new ArrayList<EquationNode>();
 
     /**
      * Default Constructor

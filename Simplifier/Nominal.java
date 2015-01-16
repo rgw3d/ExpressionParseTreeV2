@@ -73,8 +73,11 @@ public class Nominal extends NumberStructure {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Nominal)) return false;
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Nominal))
+            return false;
 
         Nominal nominal = (Nominal) o;
 
@@ -96,16 +99,21 @@ public class Nominal extends NumberStructure {
     @Override
     public String toString(){
         String toReturn = "";
+
         if((int)getNum()==getNum())
             toReturn+=""+(int)getNum();
         else
             toReturn+=""+getNum();
+
         if(getVar()!=0){
             if((int)getVar()==getVar())
+
                 if(this.equals(new Nominal(1,1)))
                     toReturn = Parser.variable;
+
                 else if(getVar()==1)
                     toReturn+=Parser.variable;
+
                 else
                     toReturn+=Parser.variable+"^"+(int)getVar();
             else
