@@ -20,6 +20,7 @@ public class PolynomialSolver {
 
         int length = list.size();
         double highestExponent = SolveControl.findHighestExponent(list);
+        int varNominalCount = SolveControl.countNominalsWithVars(list);
 
         switch (length){
             case 0:
@@ -29,33 +30,60 @@ public class PolynomialSolver {
                 if(highestExponent == 0)//no variable, no answer
                     return new SolvedEquation(new Nominal(Double.NaN,0),list);
                 else
-                    return  new SolvedEquation(new Nominal(0,0),list);//variable must be zero
+                    return new SolvedEquation(new Nominal(0,0),list);//variable must be zero
             case 2:
-                if(2 >0){
-                    //do something with the fractions
-                }
-                else{
-                    //should be able to either factor or solve
-                }
-                break;
+                return solveLengthTwoPolynomial(list, highestExponent,varNominalCount);
             case 3:
-                //do something with a 3 long list;
-                break;
+                return solveLengthThreePolynomial(list, highestExponent,varNominalCount);
             case 4:
-                //do something with a 4 long list;
-                break;
+                return solveLengthFourPolynomial(list, highestExponent,varNominalCount);
             case 5:
-                //do something with a 5 long list;
-                //this is probably the most that we can do with a polynomial
-                break;
+                return solveLengthFivePolynomial(list, highestExponent,varNominalCount);
             default:
-                //catch anything else of a length.
-                //go from here and determine if it is possible to solve.
+
                 break;
         }
 
         return new SolvedEquation();
     }
+
+    private static SolvedEquation solveLengthTwoPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
+        if(varNominalCount==2){//there are two variables in a list of length two
+
+        }
+        else if(varNominalCount ==1){
+
+        }
+        else{//having no
+
+        }
+        return  new SolvedEquation();
+    }
+
+    private static SolvedEquation solveLengthThreePolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
+
+        return new SolvedEquation();
+    }
+
+    private static SolvedEquation solveLengthFourPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
+
+        return  new SolvedEquation();
+    }
+
+    private static SolvedEquation solveLengthFivePolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public static SolvedEquation startPolynomialSolverWithFractions(ArrayList<EquationNode> list){
 

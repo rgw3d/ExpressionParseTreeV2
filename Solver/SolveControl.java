@@ -42,9 +42,8 @@ public class SolveControl {
     public static int countFractions(ArrayList<EquationNode> list){
         int count = 0;
         for(EquationNode node: list){
-            if(node instanceof Fraction){
+            if(node instanceof Fraction)
                count ++;
-            }
         }
         return count;
     }
@@ -60,12 +59,26 @@ public class SolveControl {
         double highestExponent = 0;
         for(EquationNode node: list){
             if(node instanceof Nominal){
-                if(node.getVar()>highestExponent){
+                if(node.getVar()>highestExponent)
                     highestExponent = node.getVar();
-                }
             }
         }
         return highestExponent;
+    }
+
+    /**
+     * Count the number of Nominals with variable exponent values that are not zero
+     *
+     * @param list the list of EquationNodes
+     * @return count of the Nominals with variable exponent values that are not zero
+     */
+    public static int countNominalsWithVars(ArrayList<EquationNode> list){
+        int count = 0;
+        for(EquationNode node: list){
+            if(node instanceof Fraction)
+                count ++;
+        }
+        return count;
     }
 
 
