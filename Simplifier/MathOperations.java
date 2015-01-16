@@ -314,8 +314,6 @@ public class MathOperations {
         //now both of the lists have the GCD and can be used to find something to divide by.
         if (canDivide) {
             simplifyFractionByGCD(fraction, topDivisors, botDivisors);
-        }
-
 
         /*
         above loops divided the fractions.  now its time to remove the variables.  yay dividing by variables.
@@ -324,59 +322,27 @@ public class MathOperations {
         negative exponents do not count.
         */
 
-        boolean canReduceVars = true;
-        int topSmallestVar = findSmallestVariableExponent(fraction.getTop());
-        int botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
+            int topSmallestVar = findSmallestVariableExponent(fraction.getTop());
+            int botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
 
-
-
-        for (EquationNode x : fraction.getBottom()) {
-                if (x instanceof Nominal) {
-                    if (botSmallestVar == -1) {
-                        botSmallestVar = (int) x.getVar();
-                    } else if (botSmallestVar > x.getVar() && x.getVar() >= 0) {
-                        botSmallestVar = (int) x.getVar();
-                    }
-                } else {
-                    //canReduceVars = false;
-                }
+            if (topSmallestVar!=-1 && botSmallestVar!=-1) {
+                reduceVariableExponents(fraction, topSmallestVar, botSmallestVar);
+            }
         }
 
-            if (canReduceVars) {
-                int reduceValue;
-                if (topSmallestVar >= botSmallestVar)
-                    reduceValue = botSmallestVar;
-                else
-                    reduceValue = topSmallestVar;
+        if (fraction.getTop().size() == 1 && fraction.getBottom().size() == 1 && fraction.getBottom().get(0).equals(Nominal.One)) //if the number does not equal zero
+            return new Nominal(fraction.getTop().get(0).getNum(), fraction.getTop().get(0).getVar());
 
-                ArrayList<EquationNode> tmpTop = new ArrayList<EquationNode>();
-                ArrayList<EquationNode> tmpBot = new ArrayList<EquationNode>();
+        else if(fraction.getTop().size() == 1 && fraction.getBottom().size() == 1//if only numbers are in the top and bottom.
+                && fraction.getTop().get(0).getVar() == 0 && fraction.getTop().get(0) instanceof Nominal
+                && fraction.getBottom().get(0).getVar() == 0 && fraction.getBottom().get(0) instanceof Nominal)
+            return new Nominal(fraction.getTop().get(0).getNum()/fraction.getBottom().get(0).getNum(),0);//return the division of these numbers
 
-                for (EquationNode node : fraction.getTop()) {
-                    tmpTop.add(new Nominal((node.getNum()), node.getVar() - reduceValue));
-                }
-                for (EquationNode node : fraction.getBottom()) {
-                    tmpBot.add(new Nominal((node.getNum()), node.getVar() - reduceValue));
-                }
-
-                fraction.getTop().clear();
-                fraction.getTop().addAll(tmpTop);
-
-                fraction.getBottom().clear();
-                fraction.getBottom().addAll(tmpBot);
-            }
-
-            if (fraction.getTop().size() == 1 && fraction.getBottom().size() == 1 && fraction.getBottom().get(0).equals(Nominal.One)) //if the number does not equal zero
-                return new Nominal(fraction.getTop().get(0).getNum(), fraction.getTop().get(0).getVar());
-            else if(fraction.getTop().size() == 1 && fraction.getBottom().size() == 1//if only numbers are in the top and bottom.
-                    && fraction.getTop().get(0).getVar() == 0 && fraction.getTop().get(0) instanceof Nominal
-                    && fraction.getBottom().get(0).getVar() == 0 && fraction.getBottom().get(0) instanceof Nominal)
-                return new Nominal(fraction.getTop().get(0).getNum()/fraction.getBottom().get(0).getNum(),0);//return the division of these numbers
-
-            return fraction;
+        return fraction;
 
 
     }
+
 
 
 
@@ -390,7 +356,7 @@ public class MathOperations {
          /*
             This section either loops through the top of the fraction, or the bottom of it
             determining the greatest common divisor of all the numbers
-            Determines that canDevide = false if there is fraction present in the top or bottom of the fraction.
+            Determines that canDivide = false if there is fraction present in the top or bottom of the fraction.
                 this also clears the list of Divisors
             Loops through each value while looping though each value.
                 get(0) is tested against get(0-(size()-1)) to determine the GCD
@@ -487,6 +453,7 @@ public class MathOperations {
     /**
      * Used to find the smallest variable exponent in a list of Nominals
      * Assumed that Fractions are not a part of this list
+     * Assumed that there are no negative exponents - they are ignored
      * @param list list of Nominals! Assumed that fractions are not a part of this list!
      * @return the smallest variable exponent in the list
      */
@@ -503,7 +470,36 @@ public class MathOperations {
         return smallestVar;
     }
 
+    /**
+     * This function reduces all of the Fractions Nominal 's variable exponent value by subtracting the lowest common variable
+     *  exponent from all the Nominal s
+     * Essentially, it reduces all the Nominals.
+     * Assumed that the fraction.getTop() and getBottom() return a list of only Nominals! no Fractions within fractions
+     * @param fraction the fraction that will be reduced
+     * @param topSmallestVar the smallest var value common to all Nominals in the top of the fraction
+     * @param botSmallestVar the smallest var value common to all Nominals in the bottom of the fraction
+     */
+    private static void reduceVariableExponents(NumberStructure fraction, int topSmallestVar, int botSmallestVar) {
+        int reduceValue;
+        if (topSmallestVar >= botSmallestVar)
+            reduceValue = botSmallestVar;
+        else
+            reduceValue = topSmallestVar;
 
+        ArrayList<EquationNode> tmpTop = new ArrayList<EquationNode>();
+        ArrayList<EquationNode> tmpBot = new ArrayList<EquationNode>();
+
+        for (EquationNode node : fraction.getTop())
+            tmpTop.add(new Nominal((node.getNum()), node.getVar() - reduceValue));
+        for (EquationNode node : fraction.getBottom())
+            tmpBot.add(new Nominal((node.getNum()), node.getVar() - reduceValue));
+
+        fraction.getTop().clear();
+        fraction.getTop().addAll(tmpTop);
+
+        fraction.getBottom().clear();
+        fraction.getBottom().addAll(tmpBot);
+    }
 
 
 
