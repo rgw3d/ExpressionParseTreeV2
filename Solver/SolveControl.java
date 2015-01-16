@@ -75,10 +75,25 @@ public class SolveControl {
     public static int countNominalsWithVars(ArrayList<EquationNode> list){
         int count = 0;
         for(EquationNode node: list){
-            if(node instanceof Fraction)
+            if(node instanceof Nominal && node.getVar()!=0)
                 count ++;
         }
         return count;
+    }
+
+    /**
+     * Finds the first instance of a specified degree Nominal in a list of Nominals
+     * Assumes list only has Nominals
+     * @param list list of Nominals to be tested
+     * @param degree the specified variable degree to find
+     * @return first instance of Nth degree Nominal, or Nominal.One if nothing of that degree is found
+     */
+    public static Nominal findNthDegreeNominal(ArrayList<EquationNode> list, double degree){
+        for(EquationNode node: list){
+            if(node.getVar() == degree)
+                return (Nominal)node;
+        }
+        return Nominal.One;
     }
 
 

@@ -54,9 +54,9 @@ public class PolynomialSolver {
         else if(varNominalCount ==1){
 
         }
-        else{//having no
+        else//having no variables should not be possible, but here it is anyway to print an error message
+            throw new UnsupportedOperationException("Having two Nominals without variables should not be possible. List: "+list.get(0)+ " " + list.get(1));
 
-        }
         return  new SolvedEquation();
     }
 
