@@ -1,9 +1,6 @@
 package Solver;
 
-import Simplifier.EquationNode;
-import Simplifier.Fraction;
-import Simplifier.MathOperations;
-import Simplifier.Nominal;
+import Simplifier.*;
 
 import java.util.ArrayList;
 
@@ -22,14 +19,38 @@ public class SolveControl {
     public static void startSolve(ArrayList<EquationNode> list){
         int length = list.size();
         int fractionCount = MathOperations.countFractions(list);
+        SolvedEquation solvedEquation;
 
+        long startTime = System.currentTimeMillis();
         if(fractionCount == length)
-            FractionSolver.startFractionSolver(list);
+            solvedEquation = FractionSolver.startFractionSolver(list);
         else if( fractionCount>0 )
-            PolynomialSolver.startPolynomialSolverWithFractions(list);
+            solvedEquation = PolynomialSolver.startPolynomialSolverWithFractions(list);
         else
-            PolynomialSolver.startPolynomialSolver(list);
+            solvedEquation = PolynomialSolver.startPolynomialSolver(list);
+
+        long endTime = System.currentTimeMillis();
+
+        if(solvedEquation.getSolutionSet().size()!=0) {
+            printSolutionSet(solvedEquation);
+            System.out.println();
+            System.out.println("It took " + (endTime - startTime) + " milliseconds to solve");//print time
+            System.out.println();
+        }
+        else
+            System.out.println("No solution found, or no solution exists");
     }
+
+    public static void printSolutionSet(SolvedEquation solvedEquation){
+        System.out.println();
+        System.out.println("Assuming Expression is set to zero... ");
+        System.out.println("Solution Set: ");
+        for(EquationNode nominal: solvedEquation.getSolutionSet()){
+            System.out.println("\t"+ Parser.variable+" = "+ nominal.getNum());
+        }
+    }
+
+
 
 
 

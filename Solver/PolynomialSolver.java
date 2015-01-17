@@ -13,7 +13,6 @@ import java.util.ArrayList;
  */
 public class PolynomialSolver {
 
-
     /**
      * @param list of Nominals to be solved
      * @return SolvedEquation in form of the SolvedEquation object

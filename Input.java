@@ -39,15 +39,21 @@ class Input {
 
             ControlOperator controlOperator =new ControlOperator();
             Parser parser = new Parser();
-            long time = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
+
             controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
-
-            printSimplifiedResult(controlOperator.getList());//get the result here
-            SolveControl.startSolve(controlOperator.getList());
+            ArrayList<EquationNode> result = controlOperator.getList();
+            printSimplifiedResult(result);//get the result here
+            long endTime = System.currentTimeMillis();
 
             System.out.println();
-            System.out.println("It took " + (System.currentTimeMillis() - time) + " milliseconds");//print time
+            System.out.println("It took " + (endTime - startTime) + " milliseconds to simplify");//print time
             System.out.println();
+
+            SolveControl.startSolve(result);
+
+
+
 
         }
     }
