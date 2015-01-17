@@ -52,28 +52,38 @@ public class PolynomialSolver {
 
     private static SolvedEquation solveLengthTwoPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
         if(varNominalCount==2){//there are two variables in a list of length two
+
             ArrayList<EquationNode> solutions = new ArrayList<EquationNode>();
             solutions.add(new Nominal(0,0));//zero must be a solution
+
             Nominal lowest = findNthDegreeNominal(findSmallestVariableExponent(list), list);
             Nominal highest = findNthDegreeNominal(highestExponent,list);
-            if(highest.getVar()-lowest.getVar()==1){//we now have something like(2x-4)
-                solutions.add(new Nominal((-1*lowest.getNum())/highest.getNum(),0));//do the algebra to get the solution
-            }
-            else{
-                ArrayList<EquationNode> insideEquation = new ArrayList<EquationNode>();
-                insideEquation.add(new Nominal(highest.getNum(),highest.getVar()-lowest.getVar()));//add both nominals
-                insideEquation.add(new Nominal(lowest.getNum(),0));
-                solutions.addAll(solveLengthTwoPolynomial(insideEquation,findHighestVariableExponent(insideEquation),countNominalsWithVars(insideEquation)).results);
-            }
+
+            ArrayList<EquationNode> insideEquation = new ArrayList<EquationNode>();
+            insideEquation.add(new Nominal(highest.getNum(),highest.getVar()-lowest.getVar()));//add both nominals
+            insideEquation.add(new Nominal(lowest.getNum(),0));
+            solutions.addAll(solveLengthTwoPolynomial(insideEquation,findHighestVariableExponent(insideEquation),countNominalsWithVars(insideEquation)).getSolutionSet());
+
+            return new SolvedEquation(solutions,list);
 
         }
         else if(varNominalCount ==1){
+
+            Nominal lowest = findNthDegreeNominal(0,list);
+            Nominal highest = findNthDegreeNominal(highestExponent,list);
+
+            ArrayList<EquationNode> solutions = new ArrayList<EquationNode>();
+            solutions.add(new Nominal(Math.pow((-1*lowest.getNum())/(highest.getNum()),(1.0/highest.getVar())),0));
+
+            if(highest.getVar()%2==0) //get both factors
+                solutions.add(new Nominal( -1 * Math.pow((-1*lowest.getNum())/(highest.getNum()),(1.0/highest.getVar())),0));
+
+            return new SolvedEquation(solutions,list);
 
         }
         else//having no variables should not be possible, but here it is anyway to print an error message
             throw new UnsupportedOperationException("Having two Nominals without variables should not be possible. List: "+list.get(0)+ " " + list.get(1));
 
-        return  new SolvedEquation();
     }
 
     private static SolvedEquation solveLengthThreePolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
