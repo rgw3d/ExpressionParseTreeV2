@@ -315,8 +315,8 @@ public class MathOperations {
             simplifyFractionByGCD(fraction, topDivisors, botDivisors);//reduce the fraction
 
             //bellow reduces variables
-            int topSmallestVar = findSmallestVariableExponent(fraction.getTop());
-            int botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
+            double topSmallestVar = findSmallestVariableExponent(fraction.getTop());
+            double botSmallestVar = findSmallestVariableExponent(fraction.getBottom());
 
             if (topSmallestVar!=-1 && botSmallestVar!=-1) {
                 reduceVariableExponents(fraction, topSmallestVar, botSmallestVar);
@@ -447,7 +447,7 @@ public class MathOperations {
      * @param list list of Nominals! Assumed that fractions are not a part of this list!
      * @return the smallest variable exponent in the list
      */
-    private static int findSmallestVariableExponent(ArrayList<EquationNode> list) {
+    public static int findSmallestVariableExponent(ArrayList<EquationNode> list) {
         int smallestVar = -1;
         for (EquationNode x : list) {
             if (x instanceof Nominal) {
@@ -469,8 +469,8 @@ public class MathOperations {
      * @param topSmallestVar the smallest var value common to all Nominals in the top of the fraction
      * @param botSmallestVar the smallest var value common to all Nominals in the bottom of the fraction
      */
-    private static void reduceVariableExponents(NumberStructure fraction, int topSmallestVar, int botSmallestVar) {
-        int reduceValue;
+    private static void reduceVariableExponents(NumberStructure fraction, double topSmallestVar, double botSmallestVar) {
+        double reduceValue;
         if (topSmallestVar >= botSmallestVar)
             reduceValue = botSmallestVar;
         else
@@ -610,7 +610,6 @@ public class MathOperations {
         }
     }
 
-
     /**
      * This determines if there is a variable in the exponent and if the exponent is an int
      * if this is true, anything can be raised to this exponent
@@ -631,6 +630,69 @@ public class MathOperations {
             }
             return false;
         }
+    }
+
+    /**
+     * Count the number of fractions in a list of EquationNodes
+     *
+     * @param list the list of EquationNodes
+     * @return count of the fractions in the list
+     */
+    public static int countFractions(ArrayList<EquationNode> list){
+        int count = 0;
+        for(EquationNode node: list){
+            if(node instanceof Fraction)
+                count ++;
+        }
+        return count;
+    }
+
+    /**
+     * Find the highest exponent of a variable, assuming no fractions, in a polynomial.
+     * Fractions are ignored!
+     *
+     * @param list the list of EquationNodes
+     * @return double of the highestExponent
+     */
+    public static double findHighestVariableExponent(ArrayList<EquationNode> list){
+        double highestExponent = 0;
+        for(EquationNode node: list){
+            if(node instanceof Nominal){
+                if(node.getVar()>highestExponent)
+                    highestExponent = node.getVar();
+            }
+        }
+        return highestExponent;
+    }
+
+    /**
+     * Count the number of Nominals with variable exponent values that are not zero
+     *
+     * @param list the list of EquationNodes
+     * @return count of the Nominals with variable exponent values that are not zero
+     */
+    public static int countNominalsWithVars(ArrayList<EquationNode> list){
+        int count = 0;
+        for(EquationNode node: list){
+            if(node instanceof Nominal && node.getVar()!=0)
+                count ++;
+        }
+        return count;
+    }
+
+    /**
+     * Finds the first instance of a specified degree Nominal in a list of Nominals
+     * Assumes list only has Nominals
+     * @param list list of Nominals to be tested
+     * @param degree the specified variable degree to find
+     * @return first instance of Nth degree Nominal, or Nominal.One if nothing of that degree is found
+     */
+    public static Nominal findNthDegreeNominal(double degree,ArrayList<EquationNode> list ){
+        for(EquationNode node: list){
+            if(node.getVar() == degree)
+                return (Nominal)node;
+        }
+        return Nominal.One;
     }
 
 }

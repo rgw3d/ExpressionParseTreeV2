@@ -1,7 +1,9 @@
 package Solver;
 
 import Simplifier.EquationNode;
+import Simplifier.MathOperations;
 import Simplifier.Nominal;
+import static Simplifier.MathOperations.*;
 
 import java.util.ArrayList;
 
@@ -19,8 +21,9 @@ public class PolynomialSolver {
     public static SolvedEquation startPolynomialSolver(ArrayList<EquationNode> list){
 
         int length = list.size();
-        double highestExponent = SolveControl.findHighestExponent(list);
-        int varNominalCount = SolveControl.countNominalsWithVars(list);
+        double highestExponent = MathOperations.findHighestVariableExponent(list);
+
+        int varNominalCount = countNominalsWithVars(list);
 
         switch (length){
             case 0:
@@ -49,6 +52,19 @@ public class PolynomialSolver {
 
     private static SolvedEquation solveLengthTwoPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
         if(varNominalCount==2){//there are two variables in a list of length two
+            ArrayList<EquationNode> solutions = new ArrayList<EquationNode>();
+            solutions.add(new Nominal(0,0));//zero must be a solution
+            Nominal lowest = findNthDegreeNominal(findSmallestVariableExponent(list), list);
+            Nominal highest = findNthDegreeNominal(highestExponent,list);
+            if(highest.getVar()-lowest.getVar()==1){//we now have something like(2x-4)
+                solutions.add(new Nominal((-1*lowest.getNum())/highest.getNum(),0));//do the algebra to get the solution
+            }
+            else{
+                ArrayList<EquationNode> insideEquation = new ArrayList<EquationNode>();
+                insideEquation.add(new Nominal(highest.getNum(),highest.getVar()-lowest.getVar()));//add both nominals
+                insideEquation.add(new Nominal(lowest.getNum(),0));
+                solutions.addAll(solveLengthTwoPolynomial(insideEquation,findHighestVariableExponent(insideEquation),countNominalsWithVars(insideEquation)).results);
+            }
 
         }
         else if(varNominalCount ==1){
