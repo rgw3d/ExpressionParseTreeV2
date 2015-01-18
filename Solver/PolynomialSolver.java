@@ -19,32 +19,44 @@ public class PolynomialSolver {
      */
     public static SolvedEquation startPolynomialSolver(ArrayList<EquationNode> list){
 
-        int length = list.size();
         double highestExponent = MathOperations.findHighestVariableExponent(list);
 
-        int varNominalCount = countNominalsWithVars(list);
-
-        switch (length){
-            case 0:
-                System.out.print("Nothing to solve");
-                break;
-            case 1:
-                if(highestExponent == 0)//no variable, no answer
-                    return new SolvedEquation(new Nominal(Double.NaN,0),list);
-                else
-                    return new SolvedEquation(new Nominal(0,0),list);//variable must be zero
-            case 2:
-                return solveLengthTwoPolynomial(list, highestExponent,varNominalCount);
-            case 3:
-                return solveLengthThreePolynomial(list, highestExponent,varNominalCount);
-            case 4:
-                return solveLengthFourPolynomial(list, highestExponent,varNominalCount);
-            case 5:
-                return solveLengthFivePolynomial(list, highestExponent,varNominalCount);
-            default:
-
-                break;
+        if((int)highestExponent!=highestExponent){
+            System.out.print("Cannot Solve, exponent value is not a whole number");
         }
+        else {
+
+            switch ((int) highestExponent) {
+                case 0:
+                    System.out.print("Nothing to solve");
+                    break;
+                case 1:
+                    return solvePowerOneEquation(list);
+                case 2:
+                    // return solveLengthTwoPolynomial(list, highestExponent,varNominalCount);
+                case 3:
+                    //return solveLengthThreePolynomial(list, highestExponent,varNominalCount);
+                case 4:
+                    //return solveLengthFourPolynomial(list, highestExponent,varNominalCount);
+                case 5:
+                    // return solveLengthFivePolynomial(list, highestExponent,varNominalCount);
+                default:
+
+                    break;
+            }
+        }
+
+        return new SolvedEquation();
+    }
+
+    private static SolvedEquation solvePowerOneEquation(ArrayList<EquationNode> list){
+        return  new SolvedEquation();
+
+    }
+
+    private static SolvedEquation solvePowerTwoEquation(ArrayList<EquationNode> list){
+
+
 
         return new SolvedEquation();
     }
@@ -85,19 +97,7 @@ public class PolynomialSolver {
 
     }
 
-    private static SolvedEquation solveLengthThreePolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
 
-        return new SolvedEquation();
-    }
-
-    private static SolvedEquation solveLengthFourPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
-
-        return  new SolvedEquation();
-    }
-
-    private static SolvedEquation solveLengthFivePolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
-        return null;
-    }
 
 
 

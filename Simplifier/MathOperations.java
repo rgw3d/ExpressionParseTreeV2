@@ -3,6 +3,7 @@ package Simplifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Set;
 
 /**
  * All the math operations used in each Simplifier.Operator class
@@ -96,7 +97,6 @@ public class MathOperations {
      */
     private static void variableDependentAddition(ArrayList<EquationNode> terms) {
         Hashtable<Double, ArrayList<EquationNode>> sortedNominals = new Hashtable<Double, ArrayList<EquationNode>>();
-        ArrayList<Double> varsAdded = new ArrayList<Double>();
 
         for (EquationNode nom : terms) {//add everyone to their respective groups
             Double nomBottom = nom.getVar();//the variable value of the nominal
@@ -106,11 +106,13 @@ public class MathOperations {
                 ArrayList<EquationNode> tmp = new ArrayList<EquationNode>();
                 tmp.add(nom);
                 sortedNominals.put(nomBottom, tmp);
-                varsAdded.add(nomBottom);
             }
         }
 
         terms.clear();//clear the original list so that we can add on to it
+
+        ArrayList<Double> varsAdded = new ArrayList<Double>();
+        varsAdded.addAll(sortedNominals.keySet());
         Collections.sort(varsAdded);
         Collections.reverse(varsAdded);//descending order
         for (Double var : varsAdded) {
@@ -125,9 +127,8 @@ public class MathOperations {
      * @param terms all Simplifier.EquationNode objects to add
      */
     private static void mixedAddition(ArrayList<EquationNode> terms) {
-        //could be a fraction, or could be an Equation Node that wasn't simplified;
         ArrayList<EquationNode> fractions = new ArrayList<EquationNode>();
-        ArrayList<EquationNode> others = new ArrayList<EquationNode>();
+        ArrayList<EquationNode> others = new ArrayList<EquationNode>();//anything that is not a fraction
 
         for(EquationNode node: terms){
             if(node instanceof Fraction)
@@ -151,7 +152,6 @@ public class MathOperations {
      */
     private static void fractionAddition(ArrayList<EquationNode> terms) {
         Hashtable<ArrayList<EquationNode>, ArrayList<EquationNode>> sortedFractions = new Hashtable<ArrayList<EquationNode>, ArrayList<EquationNode>>();
-        ArrayList<ArrayList<EquationNode>> fractionBottoms = new ArrayList<ArrayList<EquationNode>>();
 
         for (EquationNode node : terms) {
             try {
@@ -159,20 +159,22 @@ public class MathOperations {
             } catch (NullPointerException E) {//key was not mapped to a value
                 ArrayList<EquationNode> tmp = new ArrayList<EquationNode>();
                 tmp.add(node);
-                sortedFractions.put(node.getBottom(),tmp);
-                fractionBottoms.add(node.getBottom());
+                sortedFractions.put(node.getBottom(), tmp);
             }
 
         }
 
         terms.clear();
-        for (ArrayList<EquationNode> x : fractionBottoms) {
-            additionControl(sortedFractions.get(x));
+        for (ArrayList<EquationNode> x : sortedFractions.keySet()) {
+            ArrayList<EquationNode> addTop = new ArrayList<EquationNode>();
+            for(EquationNode fraction: sortedFractions.get(x))
+                addTop.addAll(fraction.getTop());
 
-            if(sortedFractions.get(x).size()!=0 && sortedFractions.get(x).get(0).getTop().size() ==1 && sortedFractions.get(x).get(0).getTop().get(0).getNum() != 0) //if the number does not equal zero
-                //noinspection SuspiciousNameCombination
-                terms.add(simplifyFractions(new Fraction(sortedFractions.get(x),x)));
-            //the if is necessary because sometimes there can be this number--> 0.0x^2.0.  screws up later.  so just don't add it.
+            variableDependentAddition(addTop);
+
+            if(x.size()!=1 || x.get(0).getNum()!=0)
+                terms.add(simplifyFractions(new Fraction(addTop, x)));
+
         }
     }
 
@@ -508,8 +510,8 @@ public class MathOperations {
             {
                 baseIsOperator(terms);
             }
-            
-            
+
+
         }
         else{//special case. base is nominal.  exponent is real number without variables. but it could be something like 2.2 or 22/10
             if(terms.get(0) instanceof Nominal
