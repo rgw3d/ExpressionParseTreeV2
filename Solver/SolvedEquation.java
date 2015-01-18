@@ -5,6 +5,8 @@ import Simplifier.MathOperations;
 import Simplifier.Nominal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class will store the solutionSet of an equation when it is solved
@@ -15,14 +17,15 @@ public class SolvedEquation {
 
 
 
-    private ArrayList<EquationNode> solutionSet;//the solutionSet
-    private ArrayList<EquationNode> initEquation;//initEquation equation
+    private Set<EquationNode> solutionSet = new HashSet<EquationNode>();//the solutionSet
+    private ArrayList<EquationNode> initEquation = new ArrayList<EquationNode>();//initEquation equation
+    private ArrayList<ArrayList<EquationNode>> factorization = new ArrayList<ArrayList<EquationNode>>();//potential factorizations
 
     public SolvedEquation(){
 
     }
 
-    public SolvedEquation(ArrayList<EquationNode> solutionSet, ArrayList<EquationNode> initEquation){
+    public SolvedEquation(Set<EquationNode> solutionSet, ArrayList<EquationNode> initEquation){
 
         this.solutionSet = solutionSet;
         this.initEquation = initEquation;
@@ -31,17 +34,21 @@ public class SolvedEquation {
 
     public SolvedEquation(Nominal solutionSet, ArrayList<EquationNode> initEquation){
 
-        ArrayList<EquationNode> tmp = new ArrayList<EquationNode>();
+        Set<EquationNode> tmp = new HashSet<EquationNode>();
         tmp.add(solutionSet);
         this.solutionSet = tmp;
         this.initEquation = initEquation;
 
     }
 
+    public void addSolution(EquationNode solution){
+        solutionSet.add(solution);
+    }
+
     public ArrayList<EquationNode> getInitEquation() {
         return initEquation;
     }
-    public ArrayList<EquationNode> getSolutionSet() {
+    public Set<EquationNode> getSolutionSet() {
         return solutionSet;
     }
 

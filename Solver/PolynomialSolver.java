@@ -33,16 +33,19 @@ public class PolynomialSolver {
                 case 1:
                     return solvePowerOneEquation(list);
                 case 2:
+                    return solvePowerTwoEquation(list);
                     // return solveLengthTwoPolynomial(list, highestExponent,varNominalCount);
                 case 3:
+                    return solvePowerThreeEquation(list);
                     //return solveLengthThreePolynomial(list, highestExponent,varNominalCount);
                 case 4:
+                    return solvePowerFourEquation(list);
                     //return solveLengthFourPolynomial(list, highestExponent,varNominalCount);
                 case 5:
+                    return solvePowerFiveEquation(list);
                     // return solveLengthFivePolynomial(list, highestExponent,varNominalCount);
                 default:
-
-                    break;
+                    return solveHighPowerEquation(list);
             }
         }
 
@@ -56,7 +59,25 @@ public class PolynomialSolver {
 
     private static SolvedEquation solvePowerTwoEquation(ArrayList<EquationNode> list){
 
+        return new SolvedEquation();
+    }
 
+    private static SolvedEquation solvePowerThreeEquation(ArrayList<EquationNode> list){
+
+        return new SolvedEquation();
+    }
+
+    private static SolvedEquation solvePowerFourEquation(ArrayList<EquationNode> list){
+
+        return new SolvedEquation();
+    }
+
+    private  static SolvedEquation solvePowerFiveEquation(ArrayList<EquationNode> list){
+
+        return new SolvedEquation();
+    }
+
+    private static SolvedEquation solveHighPowerEquation(ArrayList<EquationNode> list){
 
         return new SolvedEquation();
     }
