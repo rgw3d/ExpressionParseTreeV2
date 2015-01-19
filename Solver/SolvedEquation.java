@@ -19,7 +19,8 @@ public class SolvedEquation {
 
     private Set<EquationNode> solutionSet = new HashSet<EquationNode>();//the solutionSet
     private ArrayList<EquationNode> initEquation = new ArrayList<EquationNode>();//initEquation equation
-    private ArrayList<ArrayList<EquationNode>> factorization = new ArrayList<ArrayList<EquationNode>>();//potential factorizations
+    private ArrayList<ArrayList<ArrayList<EquationNode>>> factors = new ArrayList<ArrayList<ArrayList<EquationNode>>>();
+        //list holds different factors,and the bottom level list holds the actual factors. like this: TopLevel[Group[Factor[x-2],Factor[x+2]], Group[]]
 
     public SolvedEquation(){
 
@@ -45,9 +46,14 @@ public class SolvedEquation {
         solutionSet.add(solution);
     }
 
+    public void addFactor(ArrayList<ArrayList<EquationNode>> factorGroup){
+        factors.add(factorGroup);
+    }
+
     public ArrayList<EquationNode> getInitEquation() {
         return initEquation;
     }
+
     public Set<EquationNode> getSolutionSet() {
         return solutionSet;
     }
