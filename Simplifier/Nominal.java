@@ -12,6 +12,7 @@ public class Nominal extends NumberStructure {
     private final double Num;
     private final double Var;
 
+    public static final Nominal Zero = new Nominal(0,0);
     public static final Nominal One = new Nominal(1,0);
 
     /**

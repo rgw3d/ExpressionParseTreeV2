@@ -46,6 +46,12 @@ public class SolvedEquation {
         solutionSet.add(solution);
     }
 
+    public void addSolutions(SolvedEquation solvedEquation){
+        for(EquationNode solution: solvedEquation.getSolutionSet()){
+            solutionSet.add(solution);
+        }
+    }
+
     public void addFactor(ArrayList<ArrayList<EquationNode>> factorGroup){
         factors.add(factorGroup);
     }

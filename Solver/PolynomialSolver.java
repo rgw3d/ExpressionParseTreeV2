@@ -50,12 +50,12 @@ public class PolynomialSolver {
 
     private static SolvedEquation solvePowerOneEquation(ArrayList<EquationNode> list){
         if(list.size() == 1)
-            return new SolvedEquation(new Nominal(0,0),list);
+            return new SolvedEquation(Nominal.Zero,list);
 
         else if(list.size() == 2){
-            Nominal withVariable = findNthDegreeNominal(1,list);
-            Nominal number = findNthDegreeNominal(0,list);
-            Nominal resultant = new Nominal(-1 * number.getNum() / withVariable.getNum(),0);
+            Nominal powerOne = findNthDegreeNominal(1,list);
+            Nominal powerZero = findNthDegreeNominal(0,list);
+            Nominal resultant = new Nominal(-1 * powerZero.getNum() / powerOne.getNum(),0);
             return new SolvedEquation(resultant,list);
         }
 
@@ -65,6 +65,43 @@ public class PolynomialSolver {
     }
 
     private static SolvedEquation solvePowerTwoEquation(ArrayList<EquationNode> list){
+        if(list.size() == 1)
+            return new SolvedEquation(Nominal.Zero,list);
+
+        else if(list.size() == 2){
+            if(countNominalsWithVars(list) == 2){//if they are both variables
+                Nominal powerTwo = findNthDegreeNominal(2,list);
+                Nominal powerOne = findNthDegreeNominal(1,list);
+
+                SolvedEquation solvedEquation = new SolvedEquation();
+                solvedEquation.addSolution(Nominal.One);
+
+                ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+                ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                leftFactor.add(new Nominal(1,1));
+                ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                rightFactor.add(new Nominal(powerTwo.getNum(),powerTwo.getVar() - 1));
+                rightFactor.add(new Nominal(powerOne.getNum(),powerOne.getVar() - 1));
+                factorGroup.add(leftFactor);
+                factorGroup.add(rightFactor);
+
+                solvedEquation.addSolutions(solvePowerOneEquation(rightFactor));
+
+                return solvedEquation;
+
+            }
+            else{//if it is one variable and one number
+                Nominal powerTwo = findNthDegreeNominal(2,list);
+                Nominal powerZero = findNthDegreeNominal(0,list);
+
+                SolvedEquation solvedEquation = new SolvedEquation();
+                Nominal resultant = new Nominal(Math.pow((-1*powerZero.getNum())/(powerTwo.getNum()),(1.0/powerTwo.getVar())),0);
+                solvedEquation.addSolution(resultant);
+
+                return solvedEquation;
+
+            }
+        }
 
         return new SolvedEquation();
     }
