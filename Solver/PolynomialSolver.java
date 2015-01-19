@@ -34,16 +34,12 @@ public class PolynomialSolver {
                     return solvePowerOneEquation(list);
                 case 2:
                     return solvePowerTwoEquation(list);
-                    // return solveLengthTwoPolynomial(list, highestExponent,varNominalCount);
                 case 3:
                     return solvePowerThreeEquation(list);
-                    //return solveLengthThreePolynomial(list, highestExponent,varNominalCount);
                 case 4:
                     return solvePowerFourEquation(list);
-                    //return solveLengthFourPolynomial(list, highestExponent,varNominalCount);
                 case 5:
                     return solvePowerFiveEquation(list);
-                    // return solveLengthFivePolynomial(list, highestExponent,varNominalCount);
                 default:
                     return solveHighPowerEquation(list);
             }
@@ -53,7 +49,18 @@ public class PolynomialSolver {
     }
 
     private static SolvedEquation solvePowerOneEquation(ArrayList<EquationNode> list){
-        return  new SolvedEquation();
+        if(list.size() == 1)
+            return new SolvedEquation(new Nominal(0,0),list);
+
+        else if(list.size() == 2){
+            Nominal withVariable = findNthDegreeNominal(1,list);
+            Nominal number = findNthDegreeNominal(0,list);
+            Nominal resultant = new Nominal(-1 * number.getNum() / withVariable.getNum(),0);
+            return new SolvedEquation(resultant,list);
+        }
+
+        else
+            throw new UnsupportedOperationException("Having a list greater than size 2 with a power 1 equation is not possible.  ");
 
     }
 
