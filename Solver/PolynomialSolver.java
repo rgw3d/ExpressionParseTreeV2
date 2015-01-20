@@ -77,7 +77,7 @@ public class PolynomialSolver {
                 Nominal powerOne = findNthDegreeNominal(1,list);
 
                 SolvedEquation solvedEquation = new SolvedEquation();
-                solvedEquation.addSolution(Nominal.One);
+                solvedEquation.addSolution(Nominal.Zero);
 
                 ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
                 ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
@@ -101,6 +101,38 @@ public class PolynomialSolver {
                 SolvedEquation solvedEquation = new SolvedEquation();
                 Nominal resultant = new Nominal(Math.pow((-1*powerZero.getNum())/(powerTwo.getNum()),(1.0/powerTwo.getVar())),0);
                 solvedEquation.addSolution(resultant);
+                solvedEquation.addSolution(new Nominal(-1 * resultant.getNum(),0));//always add the opposite
+
+                if(powerZero.getNum()<0 && powerTwo.getNum()>0) {//create factors if possible
+                    ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(Math.pow(powerTwo.getNum(), 1.0 / 2), 1));//the x^2 part
+                    leftFactor.add(new Nominal(Math.pow(Math.abs(resultant.getNum()),1.0 / 2),0));//the number
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(Math.pow(powerTwo.getNum(), 1.0 / 2), 1));//the x^2 part
+                    rightFactor.add(new Nominal(-1 * Math.pow(Math.abs(resultant.getNum()), 1.0 / 2),0));//the number
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+                }
+                else if(powerTwo.getNum()<0 && powerZero.getNum()>0){
+                    ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(-1 * Math.pow(Math.abs(powerTwo.getNum()), 1.0 / 2), 1));//the x^2 part
+                    leftFactor.add(new Nominal(-1 * Math.pow(powerZero.getNum(),1.0 / 2),0));//the number
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(Math.pow(Math.abs(powerTwo.getNum()), 1.0 / 2), 1));//the x^2 part
+                    rightFactor.add(new Nominal(-1 * Math.pow(powerZero.getNum(), 1.0 / 2),0));//the number
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+                }
 
                 return solvedEquation;
 
@@ -113,22 +145,23 @@ public class PolynomialSolver {
 
             SolvedEquation solvedEquation = new SolvedEquation();
             if(( -4 * powerTwo.getNum() * powerZero.getNum())>=0) {
-                Nominal resultant = new Nominal((-1 * powerOne.getNum() + Math.sqrt(Math.pow(powerOne.getNum(), 2) + (-4 * powerTwo.getNum() * powerZero.getNum()))) / (2 * powerTwo.getNum()), 0);
-                solvedEquation.addSolution(resultant);
-                solvedEquation.addSolution(new Nominal(-1 * resultant.getNum(), 0));
+                Nominal resultantPlus = new Nominal((-1 * powerOne.getNum() + Math.sqrt(Math.pow(powerOne.getNum(), 2) + (-4 * powerTwo.getNum() * powerZero.getNum()))) / (2 * powerTwo.getNum()), 0);
+                solvedEquation.addSolution(resultantPlus);
+                Nominal resultantMinus = new Nominal((-1 * powerOne.getNum() - Math.sqrt(Math.pow(powerOne.getNum(), 2) + (-4 * powerTwo.getNum() * powerZero.getNum()))) / (2 * powerTwo.getNum()), 0);
+                solvedEquation.addSolution(new Nominal(resultantMinus.getNum(), 0));
 
                 ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
                 ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
                 ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
 
                 try{
-                    Fraction f = new Fraction(resultant.getNum());//get the left side
+                    Fraction f = new Fraction(resultantPlus.getNum());//get the left side
                     int coeff = f.getDenominator();
                     int term = f.getNumerator();
                     leftFactor.add(new Nominal(coeff,1));
                     leftFactor.add(new Nominal(term,0));
 
-                    f = new Fraction(resultant.getNum());//get the right side
+                    f = new Fraction(resultantMinus.getNum());//get the right side
                     coeff = f.getDenominator();
                     term = f.getNumerator();
                     rightFactor.add(new Nominal(coeff,1));

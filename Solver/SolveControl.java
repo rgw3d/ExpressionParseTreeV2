@@ -37,8 +37,10 @@ public class SolveControl {
             System.out.println("It took " + (endTime - startTime) + " milliseconds to solve");//print time
             System.out.println();
         }
-        else
+        else {
             System.out.println("No solution found, or no solution exists");
+            System.out.println();
+        }
     }
 
     public static void printSolutionSet(SolvedEquation solvedEquation){
@@ -50,7 +52,10 @@ public class SolveControl {
         }
 
         if(solvedEquation.getFactors().size()>0){
+            System.out.println();
+            System.out.println("Factors: (May be an approximation)");
             for(ArrayList<ArrayList<EquationNode>> factorGroups: solvedEquation.getFactors()){
+                System.out.print("\t");
                 for(ArrayList<EquationNode> factor: factorGroups){
                     String out = "(";
                     for(EquationNode node: factor){
@@ -59,8 +64,9 @@ public class SolveControl {
                     }
                     out = out.substring(0,out.length()-1);
                     out+=")";
-                    System.out.println(out);
+                    System.out.print(out);
                 }
+                System.out.println();
             }
         }
     }

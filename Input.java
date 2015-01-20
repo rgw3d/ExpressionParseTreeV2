@@ -52,9 +52,6 @@ class Input {
 
             SolveControl.startSolve(result);
 
-
-
-
         }
     }
 
@@ -191,6 +188,10 @@ class Input {
         fix = fix.replace(")(",")*(");//multiply by parenthesis
 
         fix = fix.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
+
+        fix = fix.replace(Parser.variable+"(",Parser.variable+"*("); //for situations like: x(x+3).  before the fix, that would not work
+
+        fix = fix.replace(")"+Parser.variable,")*"+Parser.variable); //same as above
 
         if(fix.startsWith("+-"))
             fix = fix.substring(1);//can't start with a +  happens of above replacements
