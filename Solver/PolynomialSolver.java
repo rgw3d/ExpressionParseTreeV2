@@ -3,6 +3,9 @@ package Solver;
 import Simplifier.EquationNode;
 import Simplifier.MathOperations;
 import Simplifier.Nominal;
+import org.apache.commons.math3.fraction.Fraction;
+import org.apache.commons.math3.fraction.FractionConversionException;
+
 import static Simplifier.MathOperations.*;
 
 import java.util.ArrayList;
@@ -102,6 +105,37 @@ public class PolynomialSolver {
 
             }
         }
+        else if(list.size() == 3){ //full quadratic
+            Nominal powerTwo = findNthDegreeNominal(2,list);
+            Nominal powerOne = findNthDegreeNominal(1,list);
+            Nominal powerZero = findNthDegreeNominal(0,list);
+
+            SolvedEquation solvedEquation = new SolvedEquation();
+            if(( -4 * powerTwo.getNum() * powerZero.getNum())>=0) {
+                Nominal resultant = new Nominal((-1 * powerOne.getNum() + Math.sqrt(Math.pow(powerOne.getNum(), 2) + (-4 * powerTwo.getNum() * powerZero.getNum()))) / (2 * powerTwo.getNum()), 0);
+                solvedEquation.addSolution(resultant);
+                solvedEquation.addSolution(new Nominal(-1 * resultant.getNum(), 0));
+
+                ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+                ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+
+                try{
+                    Fraction f = new Fraction(resultant.getNum());
+                    int coeff = f.getDenominator();
+                    int term = f.getNumerator();
+                }
+                catch (FractionConversionException e){
+
+                }
+            }
+            else
+                solvedEquation.addSolution(new Nominal(Double.NaN,0));
+
+
+
+
+        }
 
         return new SolvedEquation();
     }
@@ -161,6 +195,51 @@ public class PolynomialSolver {
             throw new UnsupportedOperationException("Having two Nominals without variables should not be possible. List: "+list.get(0)+ " " + list.get(1));
 
     }
+
+
+    //http://jonisalonen.com/2012/converting-decimal-numbers-to-ratios/
+    public static String float2rat(double x) {
+        double tolerance = 1.0E-6;
+        double h1=1;
+        double h2=0;
+        double k1=0;
+        double k2=1;
+        double b = x;
+        do {
+            double a = Math.floor(b);
+            double aux = h1;
+            h1 = a*h1+h2;
+            h2 = aux;
+            aux = k1;
+            k1 = a*k1+k2;
+            k2 = aux;
+            b = 1/(b-a);
+        } while (Math.abs(x-h1/k1) > Math.abs(x*tolerance));
+
+        return h1+"/"+k1;
+    }
+
+    public static class Factor {
+        int coeff;
+        int term;
+        double dec;
+
+        public Factor(double dec)  {
+            this.dec = dec;
+        }
+        public  toString() throws FractionConversionException {
+            if(term >= 0)
+                return "("+coeff+"x + "+term+")";
+            else
+                return "("+coeff+"x - "+(term*-1)+")";
+        }
+        private void convertDecimalToFraction(double dec) throws FractionConversionException {
+            Fraction f = new Fraction(dec);
+            coeff = f.getDenominator();
+            term = f.getNumerator();
+        }
+    }
+
 
 
 
