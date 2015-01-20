@@ -41,8 +41,6 @@ public class PolynomialSolver {
                     return solvePowerThreeEquation(list);
                 case 4:
                     return solvePowerFourEquation(list);
-                case 5:
-                    return solvePowerFiveEquation(list);
                 default:
                     return solveHighPowerEquation(list);
             }
@@ -199,57 +197,10 @@ public class PolynomialSolver {
         return new SolvedEquation();
     }
 
-    private  static SolvedEquation solvePowerFiveEquation(ArrayList<EquationNode> list){
-
-        return new SolvedEquation();
-    }
-
     private static SolvedEquation solveHighPowerEquation(ArrayList<EquationNode> list){
 
         return new SolvedEquation();
     }
-
-    private static SolvedEquation solveLengthTwoPolynomial(ArrayList<EquationNode> list, double highestExponent, int varNominalCount) {
-        if(varNominalCount==2){//there are two variables in a list of length two
-
-            ArrayList<EquationNode> solutions = new ArrayList<EquationNode>();
-            solutions.add(new Nominal(0,0));//zero must be a solution
-
-            Nominal lowest = findNthDegreeNominal(findSmallestVariableExponent(list), list);
-            Nominal highest = findNthDegreeNominal(highestExponent,list);
-
-            ArrayList<EquationNode> insideEquation = new ArrayList<EquationNode>();
-            insideEquation.add(new Nominal(highest.getNum(),highest.getVar()-lowest.getVar()));//add both nominals
-            insideEquation.add(new Nominal(lowest.getNum(),0));
-            solutions.addAll(solveLengthTwoPolynomial(insideEquation,findHighestVariableExponent(insideEquation),countNominalsWithVars(insideEquation)).getSolutionSet());
-
-            //return new SolvedEquation(solutions,list);
-            return new SolvedEquation();
-
-        }
-        else if(varNominalCount ==1){
-
-            Nominal lowest = findNthDegreeNominal(0,list);
-            Nominal highest = findNthDegreeNominal(highestExponent,list);
-
-            ArrayList<EquationNode> solutions = new ArrayList<EquationNode>();
-            solutions.add(new Nominal(Math.pow((-1*lowest.getNum())/(highest.getNum()),(1.0/highest.getVar())),0));
-
-            if(highest.getVar()%2==0) //get both factors
-                solutions.add(new Nominal( -1 * Math.pow((-1*lowest.getNum())/(highest.getNum()),(1.0/highest.getVar())),0));
-
-            return new SolvedEquation();
-            //return new SolvedEquation(solutions,list);
-
-        }
-        else//having no variables should not be possible, but here it is anyway to print an error message
-            throw new UnsupportedOperationException("Having two Nominals without variables should not be possible. List: "+list.get(0)+ " " + list.get(1));
-
-    }
-
-
-
-
 
 
 
