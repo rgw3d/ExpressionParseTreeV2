@@ -141,17 +141,15 @@ public class PolynomialSolver {
                 factorGroup.add(rightFactor);
                 solvedEquation.addFactor(factorGroup);
 
-
             }
             else
                 solvedEquation.addSolution(new Nominal(Double.NaN,0));
 
-
-
-
+            return solvedEquation;
         }
+        else
+            throw new UnsupportedOperationException("Having a list greater than size 3 with a power 2 equation is not possible.");
 
-        return new SolvedEquation();
     }
 
     private static SolvedEquation solvePowerThreeEquation(ArrayList<EquationNode> list){

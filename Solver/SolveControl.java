@@ -48,6 +48,21 @@ public class SolveControl {
         for(EquationNode nominal: solvedEquation.getSolutionSet()){
             System.out.println("\t"+ Parser.variable+" = "+ nominal.getNum());
         }
+
+        if(solvedEquation.getFactors().size()>0){
+            for(ArrayList<ArrayList<EquationNode>> factorGroups: solvedEquation.getFactors()){
+                for(ArrayList<EquationNode> factor: factorGroups){
+                    String out = "(";
+                    for(EquationNode node: factor){
+                        out+=node;
+                        out+="+";
+                    }
+                    out = out.substring(0,out.length()-1);
+                    out+=")";
+                    System.out.println(out);
+                }
+            }
+        }
     }
 
 

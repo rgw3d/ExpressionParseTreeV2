@@ -64,6 +64,10 @@ public class SolvedEquation {
         return solutionSet;
     }
 
+    public ArrayList<ArrayList<ArrayList<EquationNode>>> getFactors(){
+        return factors;
+    }
+
     public int getLength(){
         return initEquation.size();
     }
