@@ -87,6 +87,7 @@ public class PolynomialSolver {
                 rightFactor.add(new Nominal(powerOne.getNum(),powerOne.getVar() - 1));
                 factorGroup.add(leftFactor);
                 factorGroup.add(rightFactor);
+                solvedEquation.addFactor(factorGroup);
 
                 solvedEquation.addSolutions(solvePowerOneEquation(rightFactor));
 
@@ -121,13 +122,26 @@ public class PolynomialSolver {
                 ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
 
                 try{
-                    Fraction f = new Fraction(resultant.getNum());
+                    Fraction f = new Fraction(resultant.getNum());//get the left side
                     int coeff = f.getDenominator();
                     int term = f.getNumerator();
+                    leftFactor.add(new Nominal(coeff,1));
+                    leftFactor.add(new Nominal(term,0));
+
+                    f = new Fraction(resultant.getNum());//get the right side
+                    coeff = f.getDenominator();
+                    term = f.getNumerator();
+                    rightFactor.add(new Nominal(coeff,1));
+                    rightFactor.add(new Nominal(term,0));
                 }
                 catch (FractionConversionException e){
-
                 }
+
+                factorGroup.add(leftFactor);
+                factorGroup.add(rightFactor);
+                solvedEquation.addFactor(factorGroup);
+
+
             }
             else
                 solvedEquation.addSolution(new Nominal(Double.NaN,0));
@@ -174,7 +188,8 @@ public class PolynomialSolver {
             insideEquation.add(new Nominal(lowest.getNum(),0));
             solutions.addAll(solveLengthTwoPolynomial(insideEquation,findHighestVariableExponent(insideEquation),countNominalsWithVars(insideEquation)).getSolutionSet());
 
-            return new SolvedEquation(solutions,list);
+            //return new SolvedEquation(solutions,list);
+            return new SolvedEquation();
 
         }
         else if(varNominalCount ==1){
@@ -188,56 +203,13 @@ public class PolynomialSolver {
             if(highest.getVar()%2==0) //get both factors
                 solutions.add(new Nominal( -1 * Math.pow((-1*lowest.getNum())/(highest.getNum()),(1.0/highest.getVar())),0));
 
-            return new SolvedEquation(solutions,list);
+            return new SolvedEquation();
+            //return new SolvedEquation(solutions,list);
 
         }
         else//having no variables should not be possible, but here it is anyway to print an error message
             throw new UnsupportedOperationException("Having two Nominals without variables should not be possible. List: "+list.get(0)+ " " + list.get(1));
 
-    }
-
-
-    //http://jonisalonen.com/2012/converting-decimal-numbers-to-ratios/
-    public static String float2rat(double x) {
-        double tolerance = 1.0E-6;
-        double h1=1;
-        double h2=0;
-        double k1=0;
-        double k2=1;
-        double b = x;
-        do {
-            double a = Math.floor(b);
-            double aux = h1;
-            h1 = a*h1+h2;
-            h2 = aux;
-            aux = k1;
-            k1 = a*k1+k2;
-            k2 = aux;
-            b = 1/(b-a);
-        } while (Math.abs(x-h1/k1) > Math.abs(x*tolerance));
-
-        return h1+"/"+k1;
-    }
-
-    public static class Factor {
-        int coeff;
-        int term;
-        double dec;
-
-        public Factor(double dec)  {
-            this.dec = dec;
-        }
-        public  toString() throws FractionConversionException {
-            if(term >= 0)
-                return "("+coeff+"x + "+term+")";
-            else
-                return "("+coeff+"x - "+(term*-1)+")";
-        }
-        private void convertDecimalToFraction(double dec) throws FractionConversionException {
-            Fraction f = new Fraction(dec);
-            coeff = f.getDenominator();
-            term = f.getNumerator();
-        }
     }
 
 
