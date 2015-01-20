@@ -171,6 +171,7 @@ public class PolynomialSolver {
                     rightFactor.add(new Nominal(term,0));
                 }
                 catch (FractionConversionException e){
+                    System.out.print("===Unable to Factor Equation===");
                 }
 
                 factorGroup.add(leftFactor);
