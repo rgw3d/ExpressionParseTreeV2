@@ -189,6 +189,92 @@ public class PolynomialSolver {
 
     private static SolvedEquation solvePowerThreeEquation(ArrayList<EquationNode> list){
 
+        if(list.size() == 1){
+            return new SolvedEquation(Nominal.Zero,list);
+        }
+        else if(list.size() == 2){
+            if(countNominalsWithVars(list) == 2 ){//other variable could be power 2 or 1
+                Nominal powerThree = findNthDegreeNominal(3,list);
+                Nominal powerTwo = findNthDegreeNominal(2,list);//this will return a Nominal.Zero if nothing is found
+                Nominal powerOne = findNthDegreeNominal(1,list);
+
+                if(powerTwo.getNum() != 0){//meaning that there the other variable is of power two
+
+                    SolvedEquation solvedEquation = new SolvedEquation();
+                    solvedEquation.addSolution(Nominal.Zero);
+
+                    ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(1,2));
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(powerThree.getNum(),powerTwo.getVar() - 2));
+                    rightFactor.add(new Nominal(powerTwo.getNum(),powerOne.getVar() - 2));
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+
+                    solvedEquation.addSolutions(solvePowerOneEquation(rightFactor));//solve the inside
+
+                    return solvedEquation;
+                }
+                else{//then we use powerOne not powerTwo
+
+
+                }
+            }
+            else{//if there is not another variable -> (x^3-1)
+                Nominal powerThree = findNthDegreeNominal(3,list);
+                Nominal powerZero = findNthDegreeNominal(0,list);
+
+                SolvedEquation solvedEquation = new SolvedEquation();
+                Nominal resultant = new Nominal(Math.pow(((-1 * powerZero.getNum()) / powerThree.getNum()), 1.0 / 3),0);
+                solvedEquation.addSolution(resultant);
+
+                ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                if(powerZero.getNum()<0 && powerThree.getNum()>0) {
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(Math.pow(powerThree.getNum(), 1.0 / 3), 1));//a^3 - b^3 is (a - b)(a 2 + ab + b 2)
+                    leftFactor.add(new Nominal(-1 * Math.pow(Math.abs(powerZero.getNum()), 1.0 / 3), 0));
+                    //Java does not allow negatives to be raised to any fraction (like 1/3 or 1/2)
+                    //So, must make positive
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(Math.pow(powerThree.getNum(), 2.0 / 3), 2));
+                    rightFactor.add(new Nominal(Math.pow(powerThree.getNum(), 1.0 / 3) * Math.pow(Math.abs(powerZero.getNum()), 1.0 / 3), 1));
+                    rightFactor.add(new Nominal(Math.pow(Math.abs(powerZero.getNum()), 2.0 / 3), 0));
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+                }
+                else if(powerThree.getNum()>0 && powerZero.getNum()>0){
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(Math.pow(powerThree.getNum(), 1.0 / 3), 1));//a 3 + b 3 is (a + b)(a^2 - ab + b^2) :
+                    leftFactor.add(new Nominal(Math.pow(powerZero.getNum(), 1.0 / 3), 0));
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(Math.pow(powerThree.getNum(), 2.0 / 3), 2));
+                    rightFactor.add(new Nominal(-1 * Math.pow(powerThree.getNum(), 1.0 / 3) * Math.pow(powerZero.getNum(), 1.0 / 3), 1));
+                    rightFactor.add(new Nominal(Math.pow(powerZero.getNum(), 2.0 / 3), 0));
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+                }
+
+
+                //a 3 - b 3 is (a - b)(a 2 + ab + b 2) :
+                //a 3 + b 3 is (a + b)(a^2 - ab + b^2) :
+
+
+                return solvedEquation;
+            }
+        }
+
         return new SolvedEquation();
     }
 

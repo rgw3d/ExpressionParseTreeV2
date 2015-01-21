@@ -694,7 +694,7 @@ public class MathOperations {
             if(node.getVar() == degree)
                 return (Nominal)node;
         }
-        return Nominal.One;
+        return Nominal.Zero;
     }
 
 }
