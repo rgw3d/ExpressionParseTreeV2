@@ -230,7 +230,12 @@ public class PolynomialSolver {
                 Nominal powerZero = findNthDegreeNominal(0,list);
 
                 SolvedEquation solvedEquation = new SolvedEquation();
-                Nominal resultant = new Nominal(Math.pow(((-1 * powerZero.getNum()) / powerThree.getNum()), 1.0 / 3),0);
+                Nominal resultant;
+                if((powerThree.getNum()>0 && powerZero.getNum()<0)||(powerThree.getNum()<0 && powerZero.getNum()>0))//Because pow cant raise negatives to fractions
+                    resultant = new Nominal(Math.pow(((-1 * powerZero.getNum()) / powerThree.getNum()), 1.0 / 3),0);
+                else
+                    resultant = new Nominal(-1 * Math.pow(( Math.abs(powerZero.getNum() / powerThree.getNum())), 1.0 / 3),0);
+
                 solvedEquation.addSolution(resultant);
 
                 ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
@@ -265,10 +270,6 @@ public class PolynomialSolver {
                     factorGroup.add(rightFactor);
                     solvedEquation.addFactor(factorGroup);
                 }
-
-
-                //a 3 - b 3 is (a - b)(a 2 + ab + b 2) :
-                //a 3 + b 3 is (a + b)(a^2 - ab + b^2) :
 
 
                 return solvedEquation;
