@@ -209,8 +209,8 @@ public class PolynomialSolver {
                     leftFactor.add(new Nominal(1,2));
 
                     ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
-                    rightFactor.add(new Nominal(powerThree.getNum(),powerTwo.getVar() - 2));
-                    rightFactor.add(new Nominal(powerTwo.getNum(),powerOne.getVar() - 2));
+                    rightFactor.add(new Nominal(powerThree.getNum(),powerThree.getVar() - 2));
+                    rightFactor.add(new Nominal(powerTwo.getNum(),powerTwo.getVar() - 2));
 
                     factorGroup.add(leftFactor);
                     factorGroup.add(rightFactor);
@@ -221,7 +221,25 @@ public class PolynomialSolver {
                     return solvedEquation;
                 }
                 else{//then we use powerOne not powerTwo
+                    SolvedEquation solvedEquation = new SolvedEquation();
+                    solvedEquation.addSolution(Nominal.Zero);
 
+                    ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                    ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                    leftFactor.add(new Nominal(1,2));
+
+                    ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                    rightFactor.add(new Nominal(powerThree.getNum(),powerThree.getVar() - 1));
+                    rightFactor.add(new Nominal(powerOne.getNum(),powerOne.getVar() - 1));
+
+                    factorGroup.add(leftFactor);
+                    factorGroup.add(rightFactor);
+                    solvedEquation.addFactor(factorGroup);
+
+                    solvedEquation.addSolutions(solvePowerTwoEquation(rightFactor));//solve the inside
+
+                    return solvedEquation;
 
                 }
             }
@@ -275,6 +293,15 @@ public class PolynomialSolver {
                 return solvedEquation;
             }
         }
+        else if(list.size() == 3){
+
+        }
+        else if(list.size() ==4 ){
+
+        }
+        else
+            throw new UnsupportedOperationException("This should not be possible to have a power 3 equation with a length greater than 4");
+
 
         return new SolvedEquation();
     }
