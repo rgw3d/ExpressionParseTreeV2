@@ -313,7 +313,25 @@ public class PolynomialSolver {
                 Nominal powerOne = findNthDegreeNominal(1,list);
 
                 SolvedEquation solvedEquation = new SolvedEquation();
-                solvedEquation.addSolution(Nominal.Zero);
+                solvedEquation.addSolution(Nominal.Zero);//factor out an x, solution is 0
+
+                ArrayList<ArrayList<EquationNode>> factorGroup = new ArrayList<ArrayList<EquationNode>>();
+
+                ArrayList<EquationNode> leftFactor = new ArrayList<EquationNode>();
+                leftFactor.add(new Nominal(1,1));
+
+                ArrayList<EquationNode> rightFactor = new ArrayList<EquationNode>();
+                rightFactor.add(new Nominal(powerThree.getNum(),powerThree.getVar() - 1));
+                rightFactor.add(new Nominal(powerTwo.getNum(),powerTwo.getVar() - 1));
+                rightFactor.add(new Nominal(powerOne.getNum(),powerOne.getVar()-1));
+
+                factorGroup.add(leftFactor);
+                factorGroup.add(rightFactor);
+                solvedEquation.addFactor(factorGroup);
+
+                solvedEquation.addSolutions(solvePowerTwoEquation(rightFactor));
+
+                return solvedEquation;
 
             }
         }
