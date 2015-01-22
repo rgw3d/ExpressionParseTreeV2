@@ -198,7 +198,7 @@ public class PolynomialSolver {
                 Nominal powerTwo = findNthDegreeNominal(2,list);//this will return a Nominal.Zero if nothing is found
                 Nominal powerOne = findNthDegreeNominal(1,list);
 
-                if(powerTwo.getNum() != 0){//meaning that there the other variable is of power two
+                if(powerTwo.getVar() != 0){//meaning that there the other variable is of power two
 
                     SolvedEquation solvedEquation = new SolvedEquation();
                     solvedEquation.addSolution(Nominal.Zero);
@@ -292,8 +292,30 @@ public class PolynomialSolver {
                 return solvedEquation;
             }
         }
-        else if(list.size() == 3){
+        else if(list.size() == 3){ //x^3+x^2+1 or x^3+x^2+x or x^3+x+1
+            int nomialsWtihVars = countNominalsWithVars(list);
+            if(nomialsWtihVars == 2){//x^3+x^2+1 or x^3+x+1
+                Nominal powerThree = findNthDegreeNominal(3,list);//this will be found
+                Nominal powerTwo = findNthDegreeNominal(2,list);//might be found
+                Nominal powerOne = findNthDegreeNominal(1,list);//might be found
+                Nominal powerZero = findNthDegreeNominal(0,list);//this will be found
 
+                if(powerTwo.getVar()!=0){//meaning the form is x^3+x^2+1
+
+                }
+                else{//meaning the form is x^3+x+1
+
+                }
+            }
+            else {//the form is x^3+x^2+x  //easiest to solve
+                Nominal powerThree = findNthDegreeNominal(3,list);
+                Nominal powerTwo = findNthDegreeNominal(2,list);
+                Nominal powerOne = findNthDegreeNominal(1,list);
+
+                SolvedEquation solvedEquation = new SolvedEquation();
+                solvedEquation.addSolution(Nominal.Zero);
+
+            }
         }
         else if(list.size() == 4 ){
 
