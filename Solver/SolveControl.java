@@ -31,7 +31,7 @@ public class SolveControl {
 
         long endTime = System.currentTimeMillis();
 
-        if(solvedEquation.getSolutionSet().size()!=0) {
+        if(solvedEquation.getSolutionSet().size()!=0 && MathOperations.countNominalsWithVars(list)>0) {
             printSolutionSet(solvedEquation);
             System.out.println();
             System.out.println("It took " + (endTime - startTime) + " milliseconds to solve");//print time

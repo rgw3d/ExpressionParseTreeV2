@@ -16,6 +16,7 @@ class Input {
     public static void main(String[] args) {
 
         System.out.println("Enter an expression to see it simplified");
+        System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
         System.out.println("\tType \"stop\" to break the loop");
         while(true){
             System.out.print("Enter Expression:  ");
@@ -24,15 +25,13 @@ class Input {
             if(input.equalsIgnoreCase("stop"))
                 break;
 
+            input = extractConstants(input);
             if (!isEquation(input)) {
                 System.out.println("\nBad Expression. Please Revise\n");
                 continue;
             }
             System.out.println("Syntax Passed!");
-
-            if(!Parser.variable.equals("")) {
-                System.out.println("\tParsing with respect to: "+Parser.variable);
-            }
+            System.out.println("\tParsing with respect to: "+Parser.variable);
 
             System.out.println("\tInput Equation: " + input);
             input = handSanitizer(input);
@@ -69,6 +68,21 @@ class Input {
         }
         toPrint = toPrint.substring(1);//remove the first + sign
         System.out.println("Result: "+toPrint);
+    }
+
+    /**
+     * Extract the actual mathematical constants PI and E
+     * Call this before the other input sanitation methods to replace the constants
+     * @param input the input string.
+     * @return String of the updated input string
+     */
+    private static String extractConstants(String input){
+
+        input = input.replace("pi",Math.PI+"");//change pi to the actual value
+
+        input = input.replace("e",Math.E+"");//change e to the actual value
+
+        return input;
     }
 
     /**
@@ -121,7 +135,9 @@ class Input {
                 }
             }
         }
-        Parser.variable = variable;
+        if(!variable.equals("")) {
+            Parser.variable = variable;
+        }
 
         p = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
         m = p.matcher(input);

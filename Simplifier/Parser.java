@@ -6,7 +6,7 @@ package Simplifier;
  */
 public class Parser {
 
-    public static String variable = "";//can be any variable
+    public static String variable = "x";//can be any variable
 
     /**
      * Essentially this will be called recursively, until the only thing left to parse are

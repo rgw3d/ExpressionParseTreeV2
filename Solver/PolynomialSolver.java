@@ -31,7 +31,7 @@ public class PolynomialSolver {
 
             switch ((int) highestExponent) {
                 case 0:
-                    System.out.print("Nothing to solve");
+                    System.out.println("Nothing to solve");
                     break;
                 case 1:
                     return solvePowerOneEquation(list);
@@ -289,14 +289,13 @@ public class PolynomialSolver {
                     solvedEquation.addFactor(factorGroup);
                 }
 
-
                 return solvedEquation;
             }
         }
         else if(list.size() == 3){
 
         }
-        else if(list.size() ==4 ){
+        else if(list.size() == 4 ){
 
         }
         else
