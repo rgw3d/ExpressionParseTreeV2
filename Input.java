@@ -74,23 +74,23 @@ class Input {
     private static boolean isEquation(String input) {
         if (!(input.length() >= 3) ) //to short
         {
-            System.out.print("Too Short to be considered an expression");
+            System.out.println("Too Short to be considered an expression");
             return false;
         }
         if(!(input.contains("+")||input.contains("*")||input.contains("/") || input.contains("^"))){
-            System.out.print("Does not contain an operator");
+            System.out.println("Does not contain an operator");
             return false;
         }
 
         String endOfEq = input.substring(input.length() - 1);//ends bad
         if (endOfEq.equals("+") || endOfEq.equals("-") || endOfEq.equals("*") || endOfEq.equals("/")) {
-            System.out.print("Ends with a +, -, * or /");
+            System.out.println("Ends with a +, -, * or /");
             return false;
         }
 
         String beginOfEq = "" + input.charAt(0); //starts bad
         if (beginOfEq.equals("+")  || beginOfEq.equals("*") || beginOfEq.equals("/")) {
-            System.out.print("Starts with a +, * or /");
+            System.out.println("Starts with a +, * or /");
             return false;
         }
 
@@ -110,7 +110,7 @@ class Input {
                     variable = m.group();
                 }
                 else if(!variable.equals(m.group())){
-                    System.out.print("Mixing variables! Use only one variable.");
+                    System.out.println("Mixing variables! Use only one variable.");
                     return false;
                 }
             }
@@ -122,7 +122,7 @@ class Input {
         p = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
         m = p.matcher(input);
         if (m.find()) {
-            System.out.print("Two or more of a kind: "+m.group());
+            System.out.println("Two or more of a kind: " + m.group());
             return false;
         }
 
@@ -204,50 +204,41 @@ class Input {
         System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
         System.out.println("\tType \"stop\" to break the loop");
 
-        while(true){
-            String input = "";
+        String input;
+        do {
+            input = "";
             try {
                 input = readInput();//read input
-            }
-            catch(InputException ie) {
-                if(ie.getMessage()=="stop")//error message to stop the loop
-                    break;
-                else {//if we are not breaking, then there is an actual exception
-                    System.out.println(ie.getMessage());
-                    continue;
-                }
+            } catch (InputException ie) {
+                if (ie.getMessage().equals("stop"))//error message to stop the loop
+                    input = null;
+                else //the exception message if we are not stopping
+                    System.out.println(ie.getMessage()+"\n");
+                continue;//after the error message jump to the end of the loop
             }
 
-
-
-            //do math
-
-            ControlOperator controlOperator = new ControlOperator();
-            Parser parser = new Parser();
             long startTime = System.currentTimeMillis();
 
-            controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
-            ArrayList<EquationNode> result = controlOperator.getList();
-            System.out.print(resultToString(result));//get the result here
-            long endTime = System.currentTimeMillis();
-
-            System.out.println();
-            System.out.println("It took " + (endTime - startTime) + " milliseconds to simplify");//print time
-            System.out.println();
+            ArrayList<EquationNode> result = simplifyExpression(input);
+            System.out.println("\tResult: " + resultToString(result));//get the formatted result here
 
             SolveControl.startSolve(result);
 
 
-            Timer obj = new Timer () {
-                public void abstractMethod(){
-                    System.out.println("wo");
-                }
-            };
-            obj.abstractMethod();
+            long endTime = System.currentTimeMillis();
+            System.out.println();
+            System.out.println("It took " + (endTime - startTime) + " milliseconds");//print time
+            System.out.println();
 
 
+        } while(input!=null);
+    }
 
+    private static ArrayList<EquationNode> simplifyExpression(String input) {
+        ControlOperator controlOperator = new ControlOperator();
+        Parser parser = new Parser();
+        controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
+        return controlOperator.getList();
 
-        }
     }
 }
