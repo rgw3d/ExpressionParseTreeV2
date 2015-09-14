@@ -13,61 +13,19 @@ import java.util.regex.Pattern;
  * Created by rgw3d on 10/9/2014.
  */
 class Input {
-    public static void main(String[] args) {
-
-        System.out.println("Enter an expression to see it simplified");
-        System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
-        System.out.println("\tType \"stop\" to break the loop");
-        while(true){
-            System.out.print("Enter Expression:  ");
-            String input = new Scanner(System.in).nextLine().toLowerCase();
-            System.out.println();
-            if(input.equalsIgnoreCase("stop"))
-                break;
-
-            input = extractConstants(input);
-            if (!isEquation(input)) {
-                System.out.println("\nBad Expression. Please Revise\n");
-                continue;
-            }
-            System.out.println("Syntax Passed!");
-            System.out.println("\tParsing with respect to: "+Parser.variable);
-
-            System.out.println("\tInput Equation: " + input);
-            input = handSanitizer(input);
-
-            ControlOperator controlOperator =new ControlOperator();
-            Parser parser = new Parser();
-            long startTime = System.currentTimeMillis();
-
-            controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
-            ArrayList<EquationNode> result = controlOperator.getList();
-            printSimplifiedResult(result);//get the result here
-            long endTime = System.currentTimeMillis();
-
-            System.out.println();
-            System.out.println("It took " + (endTime - startTime) + " milliseconds to simplify");//print time
-            System.out.println();
-
-            SolveControl.startSolve(result);
-
-        }
-    }
-
     /**
-     * This is used to print the output after receiving the list of results.
+     * This is used to get the properly formated output after receiving the list of results.
      * uses addition between every term
-     * does not return anything, as it simply prints out something.
      *
      * @param list must send a ArrayListEquationNode
      */
-    private static void printSimplifiedResult(ArrayList<EquationNode> list) {
+    private static String getSimplifiedResult(ArrayList<EquationNode> list) {
         String toPrint = "";
         for (EquationNode x : list) {
             toPrint += "+" + x.toString();
         }
         toPrint = toPrint.substring(1);//remove the first + sign
-        System.out.println("Result: "+toPrint);
+        return "Result: "+toPrint;
     }
 
     /**
@@ -215,5 +173,48 @@ class Input {
         if(!orig.equals(fix))
             System.out.println("\tReformatted Equation: " + fix);//only if it has changed print the reformatted equation
         return fix;
+    }
+
+
+    public static void main(String[] args) {
+
+        System.out.println("Enter an expression to see it simplified");
+        System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
+        System.out.println("\tType \"stop\" to break the loop");
+
+        while(true){
+            System.out.print("Enter Expression:  ");
+            String input = new Scanner(System.in).nextLine().toLowerCase();
+            System.out.println();
+            if(input.equalsIgnoreCase("stop"))
+                break;
+
+            input = extractConstants(input);
+            if (!isEquation(input)) {
+                System.out.println("\nBad Expression. Please Revise\n");
+                continue;
+            }
+            System.out.println("Syntax Passed!");
+            System.out.println("\tParsing with respect to: "+Parser.variable);
+
+            System.out.println("\tInput Equation: " + input);
+            input = handSanitizer(input);
+
+            ControlOperator controlOperator = new ControlOperator();
+            Parser parser = new Parser();
+            long startTime = System.currentTimeMillis();
+
+            controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
+            ArrayList<EquationNode> result = controlOperator.getList();
+            System.out.print(getSimplifiedResult(result));//get the result here
+            long endTime = System.currentTimeMillis();
+
+            System.out.println();
+            System.out.println("It took " + (endTime - startTime) + " milliseconds to simplify");//print time
+            System.out.println();
+
+            SolveControl.startSolve(result);
+
+        }
     }
 }
