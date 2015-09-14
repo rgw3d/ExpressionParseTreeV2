@@ -1,3 +1,4 @@
+import Simplifier.InputException;
 import Simplifier.ControlOperator;
 import Simplifier.EquationNode;
 import Simplifier.Parser;
@@ -13,19 +14,40 @@ import java.util.regex.Pattern;
  * Created by rgw3d on 10/9/2014.
  */
 class Input {
+
+    private static String readInput() throws InputException {
+        System.out.print("Enter Expression:  ");
+        String input = new Scanner(System.in).nextLine().toLowerCase();
+        System.out.println();
+        if(input.equalsIgnoreCase("stop"))
+            throw new InputException("stop");
+
+        input = extractConstants(input);
+        if (!isEquation(input)) {
+            throw new InputException("Bad Expression. Please Revise");
+        }
+        System.out.println("Syntax Passed!");
+        System.out.println("\tParsing with respect to: " + Parser.variable);
+
+        System.out.println("\tInput Equation: " + input);
+        input = handSanitizer(input);
+
+        return input;
+    }
+
     /**
      * This is used to get the properly formated output after receiving the list of results.
      * uses addition between every term
      *
      * @param list must send a ArrayListEquationNode
      */
-    private static String getSimplifiedResult(ArrayList<EquationNode> list) {
-        String toPrint = "";
+    private static String resultToString(ArrayList<EquationNode> list) {
+        StringBuilder result = new StringBuilder();
         for (EquationNode x : list) {
-            toPrint += "+" + x.toString();
+            result.append("+");
+            result.append(x.toString());
         }
-        toPrint = toPrint.substring(1);//remove the first + sign
-        return "Result: "+toPrint;
+        return result.toString().substring(1);//remove the first + sign
     }
 
     /**
@@ -183,22 +205,22 @@ class Input {
         System.out.println("\tType \"stop\" to break the loop");
 
         while(true){
-            System.out.print("Enter Expression:  ");
-            String input = new Scanner(System.in).nextLine().toLowerCase();
-            System.out.println();
-            if(input.equalsIgnoreCase("stop"))
-                break;
-
-            input = extractConstants(input);
-            if (!isEquation(input)) {
-                System.out.println("\nBad Expression. Please Revise\n");
-                continue;
+            String input = "";
+            try {
+                input = readInput();//read input
             }
-            System.out.println("Syntax Passed!");
-            System.out.println("\tParsing with respect to: "+Parser.variable);
+            catch(InputException ie) {
+                if(ie.getMessage()=="stop")//error message to stop the loop
+                    break;
+                else {//if we are not breaking, then there is an actual exception
+                    System.out.println(ie.getMessage());
+                    continue;
+                }
+            }
 
-            System.out.println("\tInput Equation: " + input);
-            input = handSanitizer(input);
+
+
+            //do math
 
             ControlOperator controlOperator = new ControlOperator();
             Parser parser = new Parser();
@@ -206,7 +228,7 @@ class Input {
 
             controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
             ArrayList<EquationNode> result = controlOperator.getList();
-            System.out.print(getSimplifiedResult(result));//get the result here
+            System.out.print(resultToString(result));//get the result here
             long endTime = System.currentTimeMillis();
 
             System.out.println();
@@ -214,6 +236,17 @@ class Input {
             System.out.println();
 
             SolveControl.startSolve(result);
+
+
+            Timer obj = new Timer () {
+                public void abstractMethod(){
+                    System.out.println("wo");
+                }
+            };
+            obj.abstractMethod();
+
+
+
 
         }
     }
