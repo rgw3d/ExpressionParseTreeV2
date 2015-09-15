@@ -48,7 +48,7 @@ public class SolveControl {
         System.out.println("Assuming Expression is set to zero... ");
         System.out.println("Solution Set: ");
         for(EquationNode nominal: solvedEquation.getSolutionSet()){
-            System.out.println("\t"+ Parser.variable+" = "+ nominal.getNum());
+            System.out.println("\t"+ ExpressionParser.variable+" = "+ nominal.getNum());
         }
 
         if(solvedEquation.getFactors().size()>0){

@@ -4,7 +4,7 @@ package Simplifier;
  * Used to parse equation.  will return one Simplifier.EquationNode.  This means that
  * Created by rgw3d on 10/9/2014.
  */
-public class Parser {
+public class ExpressionParser {
 
     public static String variable = "x";//can be any variable
 

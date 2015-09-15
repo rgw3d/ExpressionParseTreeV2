@@ -110,15 +110,15 @@ public class Nominal extends NumberStructure {
             if((int)getVar()==getVar())
 
                 if(this.equals(new Nominal(1,1)))
-                    toReturn = Parser.variable;
+                    toReturn = ExpressionParser.variable;
 
                 else if(getVar()==1)
-                    toReturn+=Parser.variable;
+                    toReturn+= ExpressionParser.variable;
 
                 else
-                    toReturn+=Parser.variable+"^"+(int)getVar();
+                    toReturn+= ExpressionParser.variable+"^"+(int)getVar();
             else
-                toReturn+=Parser.variable+"^"+getVar();
+                toReturn+= ExpressionParser.variable+"^"+getVar();
         }
 
         return toReturn;

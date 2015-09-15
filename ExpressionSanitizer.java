@@ -1,21 +1,22 @@
 import Simplifier.InputException;
-import Simplifier.ControlOperator;
-import Simplifier.EquationNode;
-import Simplifier.Parser;
-import Solver.SolveControl;
+import Simplifier.ExpressionParser;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Input class for EquationParseTree
+ * Input/ input sanitation class for EquationParseTree
  * Created by rgw3d on 10/9/2014.
  */
-class Input {
+class ExpressionSanitizer {
 
-    private static String readInput() throws InputException {
+    /**
+     *
+     * @return String containing input expression
+     * @throws InputException
+     */
+    public static String readInput() throws InputException {
         System.out.print("Enter Expression:  ");
         String input = new Scanner(System.in).nextLine().toLowerCase();
         System.out.println();
@@ -27,27 +28,12 @@ class Input {
             throw new InputException("Bad Expression. Please Revise");
         }
         System.out.println("Syntax Passed!");
-        System.out.println("\tParsing with respect to: " + Parser.variable);
+        System.out.println("\tParsing with respect to: " + ExpressionParser.variable);
 
         System.out.println("\tInput Equation: " + input);
-        input = handSanitizer(input);
+        input = reformatInput(input);
 
         return input;
-    }
-
-    /**
-     * This is used to get the properly formated output after receiving the list of results.
-     * uses addition between every term
-     *
-     * @param list must send a ArrayListEquationNode
-     */
-    private static String resultToString(ArrayList<EquationNode> list) {
-        StringBuilder result = new StringBuilder();
-        for (EquationNode x : list) {
-            result.append("+");
-            result.append(x.toString());
-        }
-        return result.toString().substring(1);//remove the first + sign
     }
 
     /**
@@ -56,7 +42,7 @@ class Input {
      * @param input the input string.
      * @return String of the updated input string
      */
-    private static String extractConstants(String input){
+    public static String extractConstants(String input){
 
         input = input.replace("pi",Math.PI+"");//change pi to the actual value
 
@@ -71,7 +57,7 @@ class Input {
      * @param input the string to be tested
      * @return boolean if the expression qualifies as an acceptable expression
      */
-    private static boolean isEquation(String input) {
+    public static boolean isEquation(String input) {
         if (!(input.length() >= 3) ) //to short
         {
             System.out.println("Too Short to be considered an expression");
@@ -116,7 +102,7 @@ class Input {
             }
         }
         if(!variable.equals("")) {
-            Parser.variable = variable;
+            ExpressionParser.variable = variable;
         }
 
         p = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
@@ -140,7 +126,7 @@ class Input {
      * @param input the string to be tested
      * @return true if there is an inconsistency.
      */
-    private static boolean parenthesisCheck(String input){
+    public static boolean parenthesisCheck(String input){
         int openCount = 0;
         int closedCount = 0;
         for(int indx = 0; indx<input.length(); indx++){
@@ -163,82 +149,39 @@ class Input {
 
     /**
      *
-     * @param fix the string to reformat so that the parser can parse it
+     * @param input the string to reformat so that the parser can easily parse it
      * @return returns the "fixed"  string
      */
-    private static String handSanitizer(String fix) {
-        String orig = fix;
+    public static String reformatInput(String input) {
+        String orig = input;
 
-        fix = fix.replace(" ", "");//Getting rid of spaces
+        input = input.replace(" ", "");//Getting rid of spaces
 
-        fix = fix.replace("--", "+"); //minus a minus is addition.  make it simple
+        input = input.replace("--", "+"); //minus a minus is addition.  make it simple
 
-        fix = fix.replace("-", "+-");  //replace a negative with just plus a minus.
+        input = input.replace("-", "+-");  //replace a negative with just plus a minus.
 
-        fix = fix.replace("^+-", "^-"); //common error that happens after one of the above methods run. negative exponents
+        input = input.replace("^+-", "^-"); //common error that happens after one of the above methods run. negative exponents
 
-        fix = fix.replace("*+-", "*-"); //common error that happens if multiplying by a negative
+        input = input.replace("*+-", "*-"); //common error that happens if multiplying by a negative
 
-        fix = fix.replace("(+-", "(-"); //common error that happens if multiplying by a negative
+        input = input.replace("(+-", "(-"); //common error that happens if multiplying by a negative
 
-        fix = fix.replace(")(",")*(");//multiply by parenthesis
+        input = input.replace(")(",")*(");//multiply by parenthesis
 
-        fix = fix.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
+        input = input.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
 
-        fix = fix.replace(Parser.variable+"(",Parser.variable+"*("); //for situations like: x(x+3).  before the fix, that would not work
+        input = input.replace(ExpressionParser.variable+"(", ExpressionParser.variable+"*("); //for situations like: x(x+3).  before the fix, that would not work
 
-        fix = fix.replace(")"+Parser.variable,")*"+Parser.variable); //same as above
+        input = input.replace(")"+ ExpressionParser.variable,")*"+ ExpressionParser.variable); //same as above
 
-        if(fix.startsWith("+-"))
-            fix = fix.substring(1);//can't start with a +  happens of above replacements
+        if(input.startsWith("+-"))
+            input = input.substring(1);//can't start with a +  happens of above replacements
 
-        if(!orig.equals(fix))
-            System.out.println("\tReformatted Equation: " + fix);//only if it has changed print the reformatted equation
-        return fix;
+        if(!orig.equals(input))
+            System.out.println("\tReformatted Equation: " + input);//only if it has changed print the reformatted equation
+        return input;
     }
 
 
-    public static void main(String[] args) {
-
-        System.out.println("Enter an expression to see it simplified");
-        System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
-        System.out.println("\tType \"stop\" to break the loop");
-
-        String input;
-        do {
-            input = "";
-            try {
-                input = readInput();//read input
-            } catch (InputException ie) {
-                if (ie.getMessage().equals("stop"))//error message to stop the loop
-                    input = null;
-                else //the exception message if we are not stopping
-                    System.out.println(ie.getMessage()+"\n");
-                continue;//after the error message jump to the end of the loop
-            }
-
-            long startTime = System.currentTimeMillis();
-
-            ArrayList<EquationNode> result = simplifyExpression(input);
-            System.out.println("\tResult: " + resultToString(result));//get the formatted result here
-
-            SolveControl.startSolve(result);
-
-
-            long endTime = System.currentTimeMillis();
-            System.out.println();
-            System.out.println("It took " + (endTime - startTime) + " milliseconds");//print time
-            System.out.println();
-
-
-        } while(input!=null);
-    }
-
-    private static ArrayList<EquationNode> simplifyExpression(String input) {
-        ControlOperator controlOperator = new ControlOperator();
-        Parser parser = new Parser();
-        controlOperator.addTerm(parser.ParseEquation(input));//parse the expression
-        return controlOperator.getList();
-
-    }
 }
