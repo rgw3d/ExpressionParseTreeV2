@@ -56,18 +56,10 @@ public class Main {
                 continue;//after the error message jump to the end of the loop
             }
 
-            long startTime = System.currentTimeMillis();
-
             ArrayList<EquationNode> result = simplifyExpression(input);
             System.out.println("\tResult: " + resultToString(result));//get the formatted result here
 
             SolveControl.startSolve(result);
-
-
-            long endTime = System.currentTimeMillis();
-            System.out.println();
-            System.out.println("It took " + (endTime - startTime) + " milliseconds");//print time
-            System.out.println();
 
 
         } while(input!=null);
