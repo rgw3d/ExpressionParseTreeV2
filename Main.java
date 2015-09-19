@@ -1,5 +1,10 @@
-import Simplifier.*;
+import Simplifier.ControlOperator;
+import Simplifier.EquationNode;
+import Simplifier.ExpressionParser;
+import Simplifier.InputException;
 import Solver.SolveControl;
+import org.junit.Test;
+
 import java.util.ArrayList;
 
 /**
@@ -9,6 +14,7 @@ import java.util.ArrayList;
 public class Main {
     /**
      * Parses input, and returns ArrayList of simplified nodes
+     *
      * @param input String containing expression
      * @return ArrayList containing the simplified expression
      */
@@ -21,9 +27,10 @@ public class Main {
     /**
      * This is used to get the properly formated output after receiving the list of results.
      * uses addition between every term
+     *
      * @param list must send a ArrayListEquationNode
      */
-    public static String resultToString(ArrayList<EquationNode> list) {
+    public static String formatSimplifiedExpression(ArrayList<EquationNode> list) {
         StringBuilder result = new StringBuilder();
         for (EquationNode x : list) {
             result.append("+");
@@ -33,8 +40,8 @@ public class Main {
     }
 
     /**
-     *
      * Main method. contains input/ simplifier loop
+     *
      * @param args System in
      */
     public static void main(String[] args) {
@@ -52,17 +59,17 @@ public class Main {
                 if (ie.getMessage().equals("stop"))//error message to stop the loop
                     input = null;
                 else //the exception message if we are not stopping
-                    System.out.println(ie.getMessage()+"\n");
+                    System.out.println(ie.getMessage() + "\n");
                 continue;//after the error message jump to the end of the loop
             }
 
             ArrayList<EquationNode> result = simplifyExpression(input);
-            System.out.println("\tResult: " + resultToString(result));//get the formatted result here
+            System.out.println("\tResult: " + formatSimplifiedExpression(result));//get the formatted result here
 
             SolveControl.startSolve(result);
 
 
-        } while(input!=null);
+        } while (input != null);
     }
 
 

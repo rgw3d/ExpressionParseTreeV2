@@ -1,15 +1,20 @@
 import Simplifier.InputException;
 import Simplifier.ExpressionParser;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Input/ input sanitation class for EquationParseTree
  * Created by rgw3d on 10/9/2014.
  */
-class ExpressionSanitizer {
+public class ExpressionSanitizer {
 
     /**
      *
@@ -32,6 +37,7 @@ class ExpressionSanitizer {
 
         System.out.println("\tInput Equation: " + input);
         input = reformatInput(input);
+        System.out.println("\tReformatted Equation: " + input);
 
         return input;
     }
@@ -46,7 +52,7 @@ class ExpressionSanitizer {
 
         input = input.replace("pi",Math.PI+"");//change pi to the actual value
 
-        input = input.replace("e",Math.E+"");//change e to the actual value
+        input = input.replace("e", Math.E + "");//change e to the actual value
 
         return input;
     }
@@ -88,8 +94,8 @@ class ExpressionSanitizer {
         }
 
         String variable = "";//find the variable
+        p = Pattern.compile("[a-z]");
         for(char indx: input.toCharArray()){
-            p = Pattern.compile("[a-z]");
             m = p.matcher(indx+"");
             if(m.find()){
                 if(variable.equals("")){
@@ -153,7 +159,6 @@ class ExpressionSanitizer {
      * @return returns the "fixed"  string
      */
     public static String reformatInput(String input) {
-        String orig = input;
 
         input = input.replace(" ", "");//Getting rid of spaces
 
@@ -169,6 +174,8 @@ class ExpressionSanitizer {
 
         input = input.replace(")(",")*(");//multiply by parenthesis
 
+        input = inferMultiplication(input);//for situations like this:  3(x+1) or (x^2-1)33, where there are parentheses and numbers touching
+
         input = input.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
 
         input = input.replace(ExpressionParser.variable+"(", ExpressionParser.variable+"*("); //for situations like: x(x+3).  before the fix, that would not work
@@ -176,12 +183,25 @@ class ExpressionSanitizer {
         input = input.replace(")"+ ExpressionParser.variable,")*"+ ExpressionParser.variable); //same as above
 
         if(input.startsWith("+-"))
-            input = input.substring(1);//can't start with a +  happens of above replacements
+            input = input.substring(1);//can't start with a +. Happens because of above replacements
 
-        if(!orig.equals(input))
-            System.out.println("\tReformatted Equation: " + input);//only if it has changed print the reformatted equation
+        //if(!orig.equals(input))
+          //  System.out.println("\tReformatted Equation: " + input);//only if it has changed print the reformatted equation
         return input;
     }
 
+    public static String inferMultiplication(String input){
+        String result = "";
+        Pattern p = Pattern.compile("[(0-9)]");
+        for(int i = 0; i+1<input.length(); i++){
+            result+=input.charAt(i);
+            if((p.matcher(input.charAt(i)+"").find() && input.charAt(i+1) =='(') ||
+                    (input.charAt(i) ==')' && p.matcher(input.charAt(i+1)+"").find())){
+                result+="*";
+            }
+        }
+        result+=input.charAt(input.length()-1);
 
+        return result;
+    }
 }
