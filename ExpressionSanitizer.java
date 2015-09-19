@@ -1,14 +1,9 @@
-import Simplifier.InputException;
 import Simplifier.ExpressionParser;
-
-import org.junit.Assert;
-import org.junit.Test;
+import Simplifier.InputException;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Input/ input sanitation class for EquationParseTree
@@ -17,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 public class ExpressionSanitizer {
 
     /**
-     *
      * @return String containing input expression
      * @throws InputException
      */
@@ -25,7 +19,7 @@ public class ExpressionSanitizer {
         System.out.print("Enter Expression:  ");
         String input = new Scanner(System.in).nextLine().toLowerCase();
         System.out.println();
-        if(input.equalsIgnoreCase("stop"))
+        if (input.equalsIgnoreCase("stop"))
             throw new InputException("stop");
 
         input = extractConstants(input);
@@ -45,12 +39,13 @@ public class ExpressionSanitizer {
     /**
      * Extract the actual mathematical constants PI and E
      * Call this before the other input sanitation methods to replace the constants
+     *
      * @param input the input string.
      * @return String of the updated input string
      */
-    public static String extractConstants(String input){
+    public static String extractConstants(String input) {
 
-        input = input.replace("pi",Math.PI+"");//change pi to the actual value
+        input = input.replace("pi", Math.PI + "");//change pi to the actual value
 
         input = input.replace("e", Math.E + "");//change e to the actual value
 
@@ -64,12 +59,12 @@ public class ExpressionSanitizer {
      * @return boolean if the expression qualifies as an acceptable expression
      */
     public static boolean isEquation(String input) {
-        if (!(input.length() >= 3) ) //to short
+        if (!(input.length() >= 3)) //to short
         {
             System.out.println("Too Short to be considered an expression");
             return false;
         }
-        if(!(input.contains("+")||input.contains("*")||input.contains("/") || input.contains("^"))){
+        if (!(input.contains("+") || input.contains("*") || input.contains("/") || input.contains("^"))) {
             System.out.println("Does not contain an operator");
             return false;
         }
@@ -81,7 +76,7 @@ public class ExpressionSanitizer {
         }
 
         String beginOfEq = "" + input.charAt(0); //starts bad
-        if (beginOfEq.equals("+")  || beginOfEq.equals("*") || beginOfEq.equals("/")) {
+        if (beginOfEq.equals("+") || beginOfEq.equals("*") || beginOfEq.equals("/")) {
             System.out.println("Starts with a +, * or /");
             return false;
         }
@@ -95,19 +90,18 @@ public class ExpressionSanitizer {
 
         String variable = "";//find the variable
         p = Pattern.compile("[a-z]");
-        for(char indx: input.toCharArray()){
-            m = p.matcher(indx+"");
-            if(m.find()){
-                if(variable.equals("")){
+        for (char indx : input.toCharArray()) {
+            m = p.matcher(indx + "");
+            if (m.find()) {
+                if (variable.equals("")) {
                     variable = m.group();
-                }
-                else if(!variable.equals(m.group())){
+                } else if (!variable.equals(m.group())) {
                     System.out.println("Mixing variables! Use only one variable.");
                     return false;
                 }
             }
         }
-        if(!variable.equals("")) {
+        if (!variable.equals("")) {
             ExpressionParser.variable = variable;
         }
 
@@ -118,7 +112,7 @@ public class ExpressionSanitizer {
             return false;
         }
 
-        if(parenthesisCheck(input)){
+        if (parenthesisCheck(input)) {
             System.out.println("Uneven amount of parenthesis");
             return false;
         }
@@ -128,24 +122,22 @@ public class ExpressionSanitizer {
     }
 
     /**
-     *
      * @param input the string to be tested
      * @return true if there is an inconsistency.
      */
-    public static boolean parenthesisCheck(String input){
+    public static boolean parenthesisCheck(String input) {
         int openCount = 0;
         int closedCount = 0;
-        for(int indx = 0; indx<input.length(); indx++){
+        for (int indx = 0; indx < input.length(); indx++) {
             if ((input.charAt(indx) + "").equals(")"))
                 closedCount++;//increment closed count
             if ((input.charAt(indx) + "").equals("("))
                 openCount++;//increment open count
         }
 
-        if(!(openCount==closedCount))
-        {
-            System.out.println("Open: "+openCount);
-            System.out.println("Closed: "+closedCount);
+        if (!(openCount == closedCount)) {
+            System.out.println("Open: " + openCount);
+            System.out.println("Closed: " + closedCount);
             return true;
 
         }
@@ -154,7 +146,6 @@ public class ExpressionSanitizer {
     }
 
     /**
-     *
      * @param input the string to reformat so that the parser can easily parse it
      * @return returns the "fixed"  string
      */
@@ -172,35 +163,33 @@ public class ExpressionSanitizer {
 
         input = input.replace("(+-", "(-"); //common error that happens if multiplying by a negative
 
-        input = input.replace(")(",")*(");//multiply by parenthesis
+        input = input.replace(")(", ")*(");//multiply by parenthesis
 
         input = inferMultiplication(input);//for situations like this:  3(x+1) or (x^2-1)33, where there are parentheses and numbers touching
 
-        input = input.replace("++-","+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
+        input = input.replace("++-", "+-");//for the longest time I didn't spot this. I assumed that everyone would put in -, and not +-
 
-        input = input.replace(ExpressionParser.variable+"(", ExpressionParser.variable+"*("); //for situations like: x(x+3).  before the fix, that would not work
+        input = input.replace(ExpressionParser.variable + "(", ExpressionParser.variable + "*("); //for situations like: x(x+3).  before the fix, that would not work
 
-        input = input.replace(")"+ ExpressionParser.variable,")*"+ ExpressionParser.variable); //same as above
+        input = input.replace(")" + ExpressionParser.variable, ")*" + ExpressionParser.variable); //same as above
 
-        if(input.startsWith("+-"))
+        if (input.startsWith("+-"))
             input = input.substring(1);//can't start with a +. Happens because of above replacements
 
-        //if(!orig.equals(input))
-          //  System.out.println("\tReformatted Equation: " + input);//only if it has changed print the reformatted equation
         return input;
     }
 
-    public static String inferMultiplication(String input){
+    public static String inferMultiplication(String input) {
         String result = "";
         Pattern p = Pattern.compile("[(0-9)]");
-        for(int i = 0; i+1<input.length(); i++){
-            result+=input.charAt(i);
-            if((p.matcher(input.charAt(i)+"").find() && input.charAt(i+1) =='(') ||
-                    (input.charAt(i) ==')' && p.matcher(input.charAt(i+1)+"").find())){
-                result+="*";
+        for (int i = 0; i + 1 < input.length(); i++) {
+            result += input.charAt(i);
+            if ((p.matcher(input.charAt(i) + "").find() && input.charAt(i + 1) == '(') ||
+                    (input.charAt(i) == ')' && p.matcher(input.charAt(i + 1) + "").find())) {
+                result += "*";
             }
         }
-        result+=input.charAt(input.length()-1);
+        result += input.charAt(input.length() - 1);
 
         return result;
     }

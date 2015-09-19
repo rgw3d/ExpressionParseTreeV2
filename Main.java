@@ -3,7 +3,6 @@ import Simplifier.EquationNode;
 import Simplifier.ExpressionParser;
 import Simplifier.InputException;
 import Solver.SolveControl;
-import org.junit.Test;
 
 import java.util.ArrayList;
 
