@@ -39,7 +39,7 @@ public class Main {
     }
 
     /**
-     * Main method. contains input/ simplifier loop
+     * Main method. Has all of the context, input and output.
      *
      * @param args System in
      */
@@ -47,7 +47,7 @@ public class Main {
 
         System.out.println("Enter an expression to see it simplified");
         System.out.println("\tPI and E can be approximated.  Type pi for PI and e for E");
-        System.out.println("\tType \"stop\" to exit");
+        System.out.println("\tType \""+ExpressionSanitizer.QUIT_KEYWORD+"\" to quit");
 
         String input;
         do {
@@ -55,7 +55,7 @@ public class Main {
             try {
                 input = ExpressionSanitizer.readInput();//read input
             } catch (InputException ie) {
-                if (ie.getMessage().equals("stop"))//error message to stop the loop
+                if (ie.getMessage().equals(ExpressionSanitizer.QUIT_KEYWORD))//error message to stop the loop
                     input = null;
                 else //the exception message if we are not stopping
                     System.out.println(ie.getMessage() + "\n");

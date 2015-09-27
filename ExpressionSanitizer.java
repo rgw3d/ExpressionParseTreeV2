@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
  */
 public class ExpressionSanitizer {
 
+    public final static String QUIT_KEYWORD = "quit";
+    private final static String ERROR_PREFIX = "Bad Expression. Please Revise\n";
+
     /**
      * @return String containing input expression
      * @throws InputException
@@ -19,13 +22,11 @@ public class ExpressionSanitizer {
         System.out.print("Enter Expression:  ");
         String input = new Scanner(System.in).nextLine().toLowerCase();
         System.out.println();
-        if (input.equalsIgnoreCase("stop"))
-            throw new InputException("stop");
+        if (input.equalsIgnoreCase(QUIT_KEYWORD))
+            throw new InputException(QUIT_KEYWORD);
 
         input = extractConstants(input);
-        if (!isEquation(input)) {
-            throw new InputException("Bad Expression. Please Revise");
-        }
+        isEquation(input);//checks for input errors
         System.out.println("Syntax Passed!");
         System.out.println("\tParsing with respect to: " + ExpressionParser.variable);
 
@@ -46,7 +47,6 @@ public class ExpressionSanitizer {
     public static String extractConstants(String input) {
 
         input = input.replace("pi", Math.PI + "");//change pi to the actual value
-
         input = input.replace("e", Math.E + "");//change e to the actual value
 
         return input;
@@ -54,38 +54,32 @@ public class ExpressionSanitizer {
 
     /**
      * Determines if the input string is appropriate to parse
+     * If there is a problem, throws an InputException error.
      *
      * @param input the string to be tested
-     * @return boolean if the expression qualifies as an acceptable expression
      */
-    public static boolean isEquation(String input) {
-        if (!(input.length() >= 3)) //to short
-        {
-            System.out.println("Too Short to be considered an expression");
-            return false;
+    public static void isEquation(String input) throws InputException {
+        if (!(input.length() >= 3)) { //to short
+            throw new InputException(ERROR_PREFIX + "Too Short to be considered an expression");
         }
         if (!(input.contains("+") || input.contains("*") || input.contains("/") || input.contains("^"))) {
-            System.out.println("Does not contain an operator");
-            return false;
+            throw new InputException(ERROR_PREFIX + "Does not contain an operator");
         }
 
-        String endOfEq = input.substring(input.length() - 1);//ends bad
+        String endOfEq = input.charAt(input.length() - 1) + "";//ends bad
         if (endOfEq.equals("+") || endOfEq.equals("-") || endOfEq.equals("*") || endOfEq.equals("/")) {
-            System.out.println("Ends with a +, -, * or /");
-            return false;
+            throw new InputException(ERROR_PREFIX + "Ends with: " + endOfEq);
         }
 
-        String beginOfEq = "" + input.charAt(0); //starts bad
+        String beginOfEq = input.charAt(0) + ""; //starts bad
         if (beginOfEq.equals("+") || beginOfEq.equals("*") || beginOfEq.equals("/")) {
-            System.out.println("Starts with a +, * or /");
-            return false;
+            throw new InputException(ERROR_PREFIX + "Starts with " + beginOfEq);
         }
 
         Pattern p = Pattern.compile("[^(0-9,a-z*,/,\\-,\\.,+,\\^,\\s)]");
         Matcher m = p.matcher(input);
         if (m.find()) {//detects illegal character
-            System.out.println("Illegal Character(s): " + m.group());
-            return false;
+            throw new InputException(ERROR_PREFIX + "Illegal Character: " + m.group());
         }
 
         String variable = "";//find the variable
@@ -96,8 +90,7 @@ public class ExpressionSanitizer {
                 if (variable.equals("")) {
                     variable = m.group();
                 } else if (!variable.equals(m.group())) {
-                    System.out.println("Mixing variables! Use only one variable.");
-                    return false;
+                    throw new InputException(ERROR_PREFIX + "Mixing variables! Use only one variable.");
                 }
             }
         }
@@ -108,24 +101,21 @@ public class ExpressionSanitizer {
         p = Pattern.compile("[\\+,/,\\^,\\*]{2,}");
         m = p.matcher(input);
         if (m.find()) {
-            System.out.println("Two or more of a kind: " + m.group());
-            return false;
+            throw new InputException(ERROR_PREFIX + "Two or more of an operator: " + m.group());
         }
 
-        if (parenthesisCheck(input)) {
-            System.out.println("Uneven amount of parenthesis");
-            return false;
-        }
+        parenthesisCheck(input);
 
-        //good syntax
-        return true;
+        //good syntax if no errors are thrown.
     }
 
     /**
+     * If parenthesis line up, then no error is thrown.
+     * If there is an problem, an error is thrown describing the problem.
+     *
      * @param input the string to be tested
-     * @return true if there is an inconsistency.
      */
-    public static boolean parenthesisCheck(String input) {
+    public static void parenthesisCheck(String input) throws InputException {
         int openCount = 0;
         int closedCount = 0;
         for (int indx = 0; indx < input.length(); indx++) {
@@ -136,12 +126,10 @@ public class ExpressionSanitizer {
         }
 
         if (!(openCount == closedCount)) {
-            System.out.println("Open: " + openCount);
-            System.out.println("Closed: " + closedCount);
-            return true;
-
+            throw new InputException(ERROR_PREFIX + "Uneven amount of parenthesis\n" +
+                    "\tOpen: " + openCount + "\n" +
+                    "\tClosded: " + closedCount);
         }
-        return false;
 
     }
 
